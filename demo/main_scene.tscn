@@ -1,0 +1,68 @@
+[gd_scene load_steps=7 format=3 uid="uid://d342m3uq0bdy2"]
+
+[ext_resource type="Script" uid="uid://b5i138mgtv46q" path="res://demo/main_scene.gd" id="1_3kex6"]
+[ext_resource type="PackedScene" uid="uid://dmhm6was1aqy4" path="res://demo/cars/kia_rio.tscn" id="1_72jhp"]
+
+[sub_resource type="WorldBoundaryShape3D" id="WorldBoundaryShape3D_a1o35"]
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_a1o35"]
+frequency = 0.8185
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_72jhp"]
+noise = SubResource("FastNoiseLite_a1o35")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_3kex6"]
+albedo_texture = SubResource("NoiseTexture2D_72jhp")
+
+[node name="MainScene" type="Node3D"]
+script = ExtResource("1_3kex6")
+
+[node name="Hud" type="CanvasLayer" parent="."]
+
+[node name="Grid" type="GridContainer" parent="Hud"]
+offset_right = 206.0
+offset_bottom = 210.0
+columns = 2
+
+[node name="RpmLabel" type="Label" parent="Hud/Grid"]
+layout_mode = 2
+text = "RPM"
+
+[node name="Rpm" type="Label" parent="Hud/Grid"]
+layout_mode = 2
+text = "0"
+
+[node name="GearLabel" type="Label" parent="Hud/Grid"]
+layout_mode = 2
+text = "Gear"
+
+[node name="Gear" type="Label" parent="Hud/Grid"]
+layout_mode = 2
+text = "0"
+
+[node name="SpeedLabel" type="Label" parent="Hud/Grid"]
+layout_mode = 2
+text = "Speed"
+
+[node name="Speed" type="Label" parent="Hud/Grid"]
+layout_mode = 2
+text = "0"
+
+[node name="Ground" type="StaticBody3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground"]
+shape = SubResource("WorldBoundaryShape3D_a1o35")
+
+[node name="CSGBox3D" type="CSGBox3D" parent="Ground"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
+size = Vector3(2000, 1, 2000)
+material = SubResource("StandardMaterial3D_3kex6")
+
+[node name="Sun" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.8300989, -0.42069113, -0.36599812, 0.55667037, 0.66341394, 0.49999997, 0.032462716, -0.6187898, 0.78488547, 0, 20, 0)
+
+[node name="KiaRio" parent="." instance=ExtResource("1_72jhp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.363, 0)
+
+[node name="Camera3D" type="Camera3D" parent="KiaRio"]
+transform = Transform3D(-1, 2.4096984e-08, -8.403617e-08, 0, 0.9612617, 0.27563736, 8.742278e-08, 0.27563736, -0.9612617, 0, 1.372, -5)

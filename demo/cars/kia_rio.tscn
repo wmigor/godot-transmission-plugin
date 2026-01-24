@@ -1,0 +1,101 @@
+[gd_scene load_steps=7 format=3 uid="uid://dmhm6was1aqy4"]
+
+[ext_resource type="Script" uid="uid://d3ywnqn48qi3a" path="res://demo/cars/car.gd" id="1_mca7s"]
+[ext_resource type="Script" uid="uid://begmy7l5i6ph2" path="res://addons/transmission/scripts/transmission.gd" id="2_xghl0"]
+[ext_resource type="Script" uid="uid://cheran6n8tw0w" path="res://addons/transmission/scripts/motor.gd" id="3_dwa0m"]
+[ext_resource type="Script" uid="uid://bf3blkxmxynai" path="res://addons/transmission/scripts/gear_box.gd" id="4_4qqoo"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_a1o35"]
+size = Vector3(1.8, 1, 4.65)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_a1o35"]
+transparency = 1
+albedo_color = Color(1, 1, 1, 0.52156866)
+
+[node name="KiaRio" type="VehicleBody3D"]
+mass = 1300.0
+linear_damp_mode = 1
+script = ExtResource("1_mca7s")
+
+[node name="Transmission" type="Node" parent="."]
+script = ExtResource("2_xghl0")
+metadata/_custom_type_script = "uid://begmy7l5i6ph2"
+
+[node name="Motor" type="Node" parent="Transmission"]
+script = ExtResource("3_dwa0m")
+metadata/_custom_type_script = "uid://cheran6n8tw0w"
+
+[node name="GearBox" type="Node" parent="Transmission"]
+script = ExtResource("4_4qqoo")
+metadata/_custom_type_script = "uid://bf3blkxmxynai"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("BoxShape3D_a1o35")
+
+[node name="CSGBox3D" type="CSGBox3D" parent="CollisionShape3D"]
+size = Vector3(1.8, 1, 4.65)
+material = SubResource("StandardMaterial3D_a1o35")
+
+[node name="WheelFR" type="VehicleWheel3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.78, -0.6, 1.35)
+use_as_steering = true
+wheel_roll_influence = 0.4
+wheel_radius = 0.316
+wheel_friction_slip = 1.0
+suspension_travel = 2.0
+suspension_stiffness = 40.0
+damping_compression = 0.88
+
+[node name="CSGCylinder3D" type="CSGCylinder3D" parent="WheelFR"]
+transform = Transform3D(-4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0, 0, 1, 0, 0, 0)
+radius = 0.316
+height = 0.2
+sides = 6
+
+[node name="WheelFL" type="VehicleWheel3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.78, -0.6, 1.35)
+use_as_steering = true
+wheel_roll_influence = 0.4
+wheel_radius = 0.316
+wheel_friction_slip = 1.0
+suspension_travel = 2.0
+suspension_stiffness = 40.0
+damping_compression = 0.88
+
+[node name="CSGCylinder3D" type="CSGCylinder3D" parent="WheelFL"]
+transform = Transform3D(-4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0, 0, 1, 0, 0, 0)
+radius = 0.316
+height = 0.2
+sides = 6
+
+[node name="WheelRR" type="VehicleWheel3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.78, -0.6, -1.35)
+use_as_traction = true
+wheel_roll_influence = 0.4
+wheel_radius = 0.316
+wheel_friction_slip = 1.0
+suspension_travel = 2.0
+suspension_stiffness = 40.0
+damping_compression = 0.88
+
+[node name="CSGCylinder3D" type="CSGCylinder3D" parent="WheelRR"]
+transform = Transform3D(-4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0, 0, 1, 0, 0, 0)
+radius = 0.316
+height = 0.2
+sides = 6
+
+[node name="WheelRL" type="VehicleWheel3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.78, -0.6, -1.35)
+use_as_traction = true
+wheel_roll_influence = 0.4
+wheel_radius = 0.316
+wheel_friction_slip = 1.0
+suspension_travel = 2.0
+suspension_stiffness = 40.0
+damping_compression = 0.88
+
+[node name="CSGCylinder3D" type="CSGCylinder3D" parent="WheelRL"]
+transform = Transform3D(-4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0, 0, 1, 0, 0, 0)
+radius = 0.316
+height = 0.2
+sides = 6
