@@ -29,6 +29,11 @@ func update_torque(throttle: float) -> void:
 		torque -= max_torque * brake_factor
 
 
+func apply_torque(delta: float, torque: float, extra_inertia := 0.0) -> void:
+	angular_velocity += torque * delta / (inertia + extra_inertia)
+	rpm = maxf(idle_rpm, rpm)
+
+
 func get_nominal_torque() -> float:
 	if rpm <= idle_rpm:
 		return idle_torque
