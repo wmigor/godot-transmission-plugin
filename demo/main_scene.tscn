@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://d342m3uq0bdy2"]
+[gd_scene load_steps=9 format=3 uid="uid://d342m3uq0bdy2"]
 
 [ext_resource type="Script" uid="uid://b5i138mgtv46q" path="res://demo/main_scene.gd" id="1_3kex6"]
 [ext_resource type="PackedScene" uid="uid://dmhm6was1aqy4" path="res://demo/cars/kia_rio.tscn" id="1_72jhp"]
@@ -14,6 +14,9 @@ noise = SubResource("FastNoiseLite_a1o35")
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_3kex6"]
 albedo_texture = SubResource("NoiseTexture2D_72jhp")
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_pyw84"]
+size = Vector3(150, 1, 300)
 
 [node name="MainScene" type="Node3D"]
 script = ExtResource("1_3kex6")
@@ -33,6 +36,14 @@ text = "RPM"
 layout_mode = 2
 text = "0"
 
+[node name="SpeedLabel" type="Label" parent="Hud/Grid"]
+layout_mode = 2
+text = "Speed"
+
+[node name="Speed" type="Label" parent="Hud/Grid"]
+layout_mode = 2
+text = "0"
+
 [node name="GearLabel" type="Label" parent="Hud/Grid"]
 layout_mode = 2
 text = "Gear"
@@ -41,11 +52,11 @@ text = "Gear"
 layout_mode = 2
 text = "0"
 
-[node name="SpeedLabel" type="Label" parent="Hud/Grid"]
+[node name="ThrottleLabel" type="Label" parent="Hud/Grid"]
 layout_mode = 2
-text = "Speed"
+text = "Throttle"
 
-[node name="Speed" type="Label" parent="Hud/Grid"]
+[node name="Throttle" type="Label" parent="Hud/Grid"]
 layout_mode = 2
 text = "0"
 
@@ -69,18 +80,31 @@ offset_bottom = -50.0
 grow_vertical = 0
 script = ExtResource("2_pyw84")
 
-[node name="Ground" type="StaticBody3D" parent="."]
+[node name="Level" type="Node3D" parent="."]
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground"]
+[node name="Ground" type="StaticBody3D" parent="Level"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Level/Ground"]
 shape = SubResource("WorldBoundaryShape3D_a1o35")
 
-[node name="CSGBox3D" type="CSGBox3D" parent="Ground"]
+[node name="CSGBox3D" type="CSGBox3D" parent="Level/Ground"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
 size = Vector3(2000, 1, 2000)
 material = SubResource("StandardMaterial3D_3kex6")
 
-[node name="Sun" type="DirectionalLight3D" parent="."]
-transform = Transform3D(0.8300989, -0.42069113, -0.36599812, 0.55667037, 0.66341394, 0.49999997, 0.032462716, -0.6187898, 0.78488547, 0, 20, 0)
+[node name="Tramplin" type="StaticBody3D" parent="Level"]
+transform = Transform3D(1, 0, 0, 0, 0.9659258, 0.25881904, 0, -0.25881904, 0.9659258, 0, 35, 400)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Level/Tramplin"]
+shape = SubResource("BoxShape3D_pyw84")
+
+[node name="CSGBox3D" type="CSGBox3D" parent="Level/Tramplin"]
+transform = Transform3D(1, 0, 0, 0, 1.0000001, 0, 0, 0, 1.0000001, 0, 0, 0)
+size = Vector3(150, 1, 300)
+material = SubResource("StandardMaterial3D_3kex6")
+
+[node name="Sun" type="DirectionalLight3D" parent="Level"]
+transform = Transform3D(0.830099, -0.42069122, -0.36599818, 0.5566704, 0.66341394, 0.50000006, 0.03246272, -0.61878985, 0.7848856, 0, 20, 0)
 
 [node name="KiaRio" parent="." instance=ExtResource("1_72jhp")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.363, 0)

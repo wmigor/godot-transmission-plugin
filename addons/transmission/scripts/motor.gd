@@ -1,13 +1,15 @@
 extends Node
 class_name Motor
 
+@export_range(0.0, 1.0, 0.001) var input_throttle := 0.0
+
 @export var idle_torque := 80.0
 @export var max_torque := 151.0
 @export var max_rpm := 6500.0
 @export var idle_rpm := 500.0
 @export var inertia := 0.2
-@export var brake_linear_factor := 0.2
-@export var brake_factor := 0.2
+@export var brake_linear_factor := 0.1
+@export var brake_factor := 0.1
 
 const TO_RPM := 60.0 / TAU
 const HP_TO_W := 745.7
@@ -20,7 +22,8 @@ var rpm: float:
 	set(value): angular_velocity = value / TO_RPM
 
 
-func update_torque(throttle: float) -> void:
+func update_torque() -> void:
+	var throttle := input_throttle
 	if rpm >= max_rpm:
 		throttle = 0.0
 	var back_torque := angular_velocity * brake_linear_factor
