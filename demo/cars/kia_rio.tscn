@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://dmhm6was1aqy4"]
+[gd_scene load_steps=12 format=3 uid="uid://dmhm6was1aqy4"]
 
 [ext_resource type="Script" uid="uid://begmy7l5i6ph2" path="res://addons/transmission/scripts/transmission.gd" id="2_xghl0"]
 [ext_resource type="Script" uid="uid://cheran6n8tw0w" path="res://addons/transmission/scripts/motor.gd" id="3_dwa0m"]
@@ -7,6 +7,7 @@
 [ext_resource type="Script" uid="uid://caxh3yxhb6k6f" path="res://addons/transmission/scripts/differential.gd" id="6_0a8ww"]
 [ext_resource type="AudioStream" uid="uid://h0y02xnqgri3" path="res://demo/sounds/engine.wav" id="6_pmh4a"]
 [ext_resource type="Script" uid="uid://ds06hfi0ebjc8" path="res://demo/cars/motor_sound.gd" id="7_0a8ww"]
+[ext_resource type="Script" uid="uid://d4akcfjaax1nv" path="res://addons/transmission/scripts/air_drag.gd" id="7_rnfmb"]
 [ext_resource type="Script" uid="uid://c8rwsbbak0tb7" path="res://demo/cars/player_controller.gd" id="7_xyd2h"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_a1o35"]
@@ -40,6 +41,9 @@ metadata/_custom_type_script = "uid://b1km6i66574xg"
 script = ExtResource("6_0a8ww")
 metadata/_custom_type_script = "uid://caxh3yxhb6k6f"
 
+[node name="AirDrag" type="Node" parent="."]
+script = ExtResource("7_rnfmb")
+
 [node name="PlayerController" type="Node" parent="."]
 script = ExtResource("7_xyd2h")
 transmission_path = NodePath("../Transmission")
@@ -52,7 +56,7 @@ _motor_path = NodePath("../Transmission/Motor")
 [node name="WheelFR" type="VehicleWheel3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.78, -0.6, 1.35)
 use_as_steering = true
-wheel_roll_influence = 0.4
+wheel_roll_influence = 0.0
 wheel_radius = 0.316
 wheel_friction_slip = 1.0
 suspension_travel = 2.0
@@ -68,7 +72,7 @@ sides = 6
 [node name="WheelFL" type="VehicleWheel3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.78, -0.6, 1.35)
 use_as_steering = true
-wheel_roll_influence = 0.4
+wheel_roll_influence = 0.0
 wheel_radius = 0.316
 wheel_friction_slip = 1.0
 suspension_travel = 2.0
@@ -84,7 +88,7 @@ sides = 6
 [node name="WheelRR" type="VehicleWheel3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.78, -0.6, -1.35)
 use_as_traction = true
-wheel_roll_influence = 0.4
+wheel_roll_influence = 0.0
 wheel_radius = 0.316
 wheel_friction_slip = 1.0
 suspension_travel = 2.0
@@ -100,7 +104,7 @@ sides = 6
 [node name="WheelRL" type="VehicleWheel3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.78, -0.6, -1.35)
 use_as_traction = true
-wheel_roll_influence = 0.4
+wheel_roll_influence = 0.0
 wheel_radius = 0.316
 wheel_friction_slip = 1.0
 suspension_travel = 2.0

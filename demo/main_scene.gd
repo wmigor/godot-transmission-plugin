@@ -8,6 +8,7 @@ extends Node3D
 @onready var gear_label := $Hud/Grid/Gear as Label
 @onready var throttle_label := $Hud/Grid/Throttle as Label
 @onready var clutch_label := $Hud/Grid/Clutch as Label
+@onready var timer_label := $Hud/Timer
 
 
 func _process(_delta: float) -> void:
@@ -16,3 +17,4 @@ func _process(_delta: float) -> void:
 	gear_label.text = str(1 + transmission.gear_box.gear_index)
 	throttle_label.text = str(snappedf(transmission.motor.input_throttle, 0.01))
 	clutch_label.text = str(snappedf(transmission.clutch.input_value, 0.01)) + (" Locked" if transmission.clutch.clutch_locked else " Free")
+	timer_label.text = str(snappedf(Time.get_ticks_msec() / 1000.0, 0.1))
