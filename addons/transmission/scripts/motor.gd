@@ -29,22 +29,6 @@ func update_torque(throttle: float) -> void:
 		torque -= max_torque * brake_factor
 
 
-func update_rotation(delta: float, gear: float, axle_av: float, axle_inertia: float, clutch: float) -> float:
-	axle_inertia *= clutch
-	clutch = clutch * clutch * clutch * clutch
-	var free_av := angular_velocity + torque * delta / inertia
-	var ttq := 0.0
-	if clutch > 0.0:
-		ttq = axle_av * clutch + free_av * (1.0 - clutch) - angular_velocity
-		angular_velocity += ttq * delta / inertia
-	else:
-		angular_velocity = free_av
-	rpm = max(rpm, idle_rpm)
-	if gear != 0.0 and axle_inertia != 0.0 and clutch > 0.0:
-		return axle_av / gear - ttq * delta / axle_inertia
-	return 0.0
-
-
 func get_nominal_torque() -> float:
 	if rpm <= idle_rpm:
 		return idle_torque

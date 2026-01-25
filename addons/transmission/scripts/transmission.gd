@@ -1,11 +1,11 @@
 extends Node
 class_name Transmission
 
-@export var wheel_inertia := 1.2
 @export var input_throttle := 0.0
 
 @onready var motor := $Motor as Motor
 @onready var gear_box := $GearBox as GearBox
+@onready var clutch := $Clutch as Clutch
 
 var _vehicle: VehicleBody3D
 var _traction_wheels: Array[VehicleWheel3D]
@@ -28,16 +28,15 @@ func _ready() -> void:
 
 
 func _physics_process(delta: float) -> void:
-	if _vehicle == null or motor == null:
+	if _vehicle == null or motor == null or len(_traction_wheels) < 1:
 		return
+	var wheel_radius := _traction_wheels[0].wheel_radius
 	var gear := gear_box.gear
-	var axle_inertia := wheel_inertia * len(_traction_wheels)
-	var clutch := 0.0 if motor.rpm <= motor.idle_rpm else 1.0
+	var axle_inertia := _vehicle.mass * wheel_radius
 	var axle_av := _get_axle_angular_velocity()
 	motor.update_torque(input_throttle)
-	var motor_reaction := motor.update_rotation(delta, gear, axle_av * gear, axle_inertia / gear, clutch)
-	var reaction_torque := len(_traction_wheels) * (motor_reaction - axle_av) * axle_inertia / delta
-	_vehicle.engine_force = clutch * (motor.torque * gear + reaction_torque) / len(_traction_wheels) / _traction_wheels[0].wheel_radius if len(_traction_wheels) > 0 else 0.0
+	var torque := clutch.calculate_output_torque(delta, motor, gear, axle_av * gear, axle_inertia / gear, 0.0)
+	_vehicle.engine_force = torque / len(_traction_wheels) / wheel_radius
 
 
 func _get_axle_angular_velocity() -> float:

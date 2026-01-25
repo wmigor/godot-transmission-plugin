@@ -12,5 +12,7 @@ func _physics_process(delta: float) -> void:
 	transmission.input_throttle = Input.get_action_strength("throttle")
 	if Input.is_action_just_pressed("gear_up"):
 		transmission.gear_box.gear_up()
+		transmission.clutch.clutch_locked = false
 	if Input.is_action_just_pressed("gear_down"):
 		transmission.gear_box.gear_down()
+		transmission.clutch.clutch_locked = false

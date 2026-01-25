@@ -1,7 +1,8 @@
-[gd_scene load_steps=7 format=3 uid="uid://d342m3uq0bdy2"]
+[gd_scene load_steps=8 format=3 uid="uid://d342m3uq0bdy2"]
 
 [ext_resource type="Script" uid="uid://b5i138mgtv46q" path="res://demo/main_scene.gd" id="1_3kex6"]
 [ext_resource type="PackedScene" uid="uid://dmhm6was1aqy4" path="res://demo/cars/kia_rio.tscn" id="1_72jhp"]
+[ext_resource type="Script" uid="uid://0uih300hbbra" path="res://demo/rpm_view.gd" id="2_pyw84"]
 
 [sub_resource type="WorldBoundaryShape3D" id="WorldBoundaryShape3D_a1o35"]
 
@@ -47,6 +48,26 @@ text = "Speed"
 [node name="Speed" type="Label" parent="Hud/Grid"]
 layout_mode = 2
 text = "0"
+
+[node name="ClutchLabel" type="Label" parent="Hud/Grid"]
+layout_mode = 2
+text = "Clutch"
+
+[node name="Clutch" type="Label" parent="Hud/Grid"]
+layout_mode = 2
+text = "0"
+
+[node name="RpmView" type="Control" parent="Hud"]
+layout_mode = 3
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 71.0
+offset_top = -250.0
+offset_right = 271.0
+offset_bottom = -50.0
+grow_vertical = 0
+script = ExtResource("2_pyw84")
 
 [node name="Ground" type="StaticBody3D" parent="."]
 
