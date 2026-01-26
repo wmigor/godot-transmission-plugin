@@ -17,8 +17,8 @@ func calculate(delta: float, motor: Motor, differential: Differential, gear: flo
 	var axle_av := differential.get_axle_angular_velocity() * gear
 	var axle_torque := differential.get_axle_torque() / gear
 	var av_delta := axle_av - motor.angular_velocity
-	var axle_inertia := differential.get_axle_inertia() / gear
-	if not clutch_locked or clutch_locked and absf(motor.torque - axle_torque / gear) > clutch_max_torque:
+	var axle_inertia := differential.get_axle_inertia() / gear / gear
+	if not clutch_locked or clutch_locked and absf(motor.torque - axle_torque) > clutch_max_torque:
 		clutch_locked = false
 		var clutch_torque := clampf(signf(av_delta) * clutch_max_torque, -clutch_max_torque, clutch_max_torque)
 		var motor_torque := motor.torque + clutch_torque
