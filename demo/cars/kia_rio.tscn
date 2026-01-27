@@ -1,7 +1,8 @@
-[gd_scene load_steps=12 format=3 uid="uid://dmhm6was1aqy4"]
+[gd_scene load_steps=14 format=3 uid="uid://dmhm6was1aqy4"]
 
 [ext_resource type="Script" uid="uid://begmy7l5i6ph2" path="res://addons/transmission/scripts/transmission.gd" id="2_xghl0"]
 [ext_resource type="Script" uid="uid://cheran6n8tw0w" path="res://addons/transmission/scripts/motor.gd" id="3_dwa0m"]
+[ext_resource type="Script" uid="uid://cs2l3kwhehf8r" path="res://addons/transmission/scripts/torque_curve.gd" id="3_rnfmb"]
 [ext_resource type="Script" uid="uid://bf3blkxmxynai" path="res://addons/transmission/scripts/gear_box.gd" id="4_4qqoo"]
 [ext_resource type="Script" uid="uid://b1km6i66574xg" path="res://addons/transmission/scripts/clutch.gd" id="5_2j28c"]
 [ext_resource type="Script" uid="uid://caxh3yxhb6k6f" path="res://addons/transmission/scripts/differential.gd" id="6_0a8ww"]
@@ -9,6 +10,10 @@
 [ext_resource type="Script" uid="uid://ds06hfi0ebjc8" path="res://demo/cars/motor_sound.gd" id="7_0a8ww"]
 [ext_resource type="Script" uid="uid://d4akcfjaax1nv" path="res://addons/transmission/scripts/air_drag.gd" id="7_rnfmb"]
 [ext_resource type="Script" uid="uid://c8rwsbbak0tb7" path="res://demo/cars/player_controller.gd" id="7_xyd2h"]
+
+[sub_resource type="Resource" id="Resource_rnfmb"]
+script = ExtResource("3_rnfmb")
+metadata/_custom_type_script = "uid://cs2l3kwhehf8r"
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_a1o35"]
 size = Vector3(1.8, 1, 4.65)
@@ -27,6 +32,7 @@ metadata/_custom_type_script = "uid://begmy7l5i6ph2"
 
 [node name="Motor" type="Node" parent="Transmission"]
 script = ExtResource("3_dwa0m")
+torque_curve = SubResource("Resource_rnfmb")
 metadata/_custom_type_script = "uid://cheran6n8tw0w"
 
 [node name="GearBox" type="Node" parent="Transmission"]

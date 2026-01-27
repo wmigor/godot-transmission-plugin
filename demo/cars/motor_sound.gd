@@ -8,7 +8,7 @@ extends AudioStreamPlayer3D
 
 func _process(_delta: float) -> void:
 	if _motor != null:
-		var t := _motor.rpm / (_motor.max_rpm - _motor.idle_rpm)
+		var t := _motor.rpm / (_motor.torque_curve.max_rpm - _motor.torque_curve.idle_rpm)
 		pitch_scale = maxf(_min_pitch, lerpf(_min_pitch, 1, t))
 		volume_db = lerpf(-20.0, 0.0, t)
 		if not playing:

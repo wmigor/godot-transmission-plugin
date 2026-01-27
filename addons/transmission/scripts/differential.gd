@@ -37,7 +37,7 @@ func get_axle_angular_velocity() -> float:
 	var rpm := 0.0
 	for wheel in _traction_wheels:
 		rpm += wheel.get_rpm()
-	return rpm / len(_traction_wheels) / Motor.TO_RPM
+	return rpm / len(_traction_wheels) / TorqueCurve.TO_RPM
 
 
 func get_axle_torque() -> float:
