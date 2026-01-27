@@ -22,13 +22,12 @@ func calculate(delta: float, motor: Motor, differential: Differential, gear: flo
 		clutch_locked = false
 		var clutch_torque := clampf(signf(av_delta) * clutch_max_torque, -clutch_max_torque, clutch_max_torque)
 		var motor_torque := motor.torque + clutch_torque
-		var differential_torque := -clutch_torque * gear
 		var new_motor_av := motor.angular_velocity + delta * motor_torque / motor.inertia
-		var new_differential_av := axle_av + delta * differential_torque / axle_inertia
+		var new_differential_av := axle_av - delta * clutch_torque / axle_inertia
 		var new_av_delta := new_differential_av - new_motor_av
 		if new_av_delta * av_delta >= 0.0:
 			motor.apply_torque(delta, motor_torque)
-			differential.apply_torque(differential_torque)
+			differential.apply_torque(-clutch_torque * gear)
 			return
 	motor.angular_velocity = (motor.angular_velocity * motor.inertia + axle_av * axle_inertia) / (motor.inertia + axle_inertia)
 	clutch_locked = true
