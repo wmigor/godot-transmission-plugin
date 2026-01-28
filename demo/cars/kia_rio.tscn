@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://dmhm6was1aqy4"]
+[gd_scene format=3 uid="uid://dmhm6was1aqy4"]
 
 [ext_resource type="Script" uid="uid://begmy7l5i6ph2" path="res://addons/transmission/scripts/transmission.gd" id="2_xghl0"]
 [ext_resource type="Script" uid="uid://cheran6n8tw0w" path="res://addons/transmission/scripts/motor.gd" id="3_dwa0m"]
@@ -10,6 +10,7 @@
 [ext_resource type="Script" uid="uid://ds06hfi0ebjc8" path="res://demo/cars/motor_sound.gd" id="7_0a8ww"]
 [ext_resource type="Script" uid="uid://d4akcfjaax1nv" path="res://addons/transmission/scripts/air_drag.gd" id="7_rnfmb"]
 [ext_resource type="Script" uid="uid://c8rwsbbak0tb7" path="res://demo/cars/player_controller.gd" id="7_xyd2h"]
+[ext_resource type="Material" uid="uid://dl7heyuc3vee8" path="res://demo/materials/wheel_material.tres" id="11_pxc1e"]
 
 [sub_resource type="Resource" id="Resource_rnfmb"]
 script = ExtResource("3_rnfmb")
@@ -22,44 +23,44 @@ size = Vector3(1.8, 1, 4.65)
 transparency = 1
 albedo_color = Color(1, 1, 1, 0.52156866)
 
-[node name="KiaRio" type="VehicleBody3D"]
+[node name="KiaRio" type="VehicleBody3D" unique_id=152696280]
 mass = 1300.0
 linear_damp_mode = 1
 
-[node name="Transmission" type="Node" parent="."]
+[node name="Transmission" type="Node" parent="." unique_id=578752458]
 script = ExtResource("2_xghl0")
 metadata/_custom_type_script = "uid://begmy7l5i6ph2"
 
-[node name="Motor" type="Node" parent="Transmission"]
+[node name="Motor" type="Node" parent="Transmission" unique_id=15648613]
 script = ExtResource("3_dwa0m")
 torque_curve = SubResource("Resource_rnfmb")
 metadata/_custom_type_script = "uid://cheran6n8tw0w"
 
-[node name="GearBox" type="Node" parent="Transmission"]
+[node name="GearBox" type="Node" parent="Transmission" unique_id=1007152266]
 script = ExtResource("4_4qqoo")
 metadata/_custom_type_script = "uid://bf3blkxmxynai"
 
-[node name="Clutch" type="Node" parent="Transmission"]
+[node name="Clutch" type="Node" parent="Transmission" unique_id=482457867]
 script = ExtResource("5_2j28c")
 metadata/_custom_type_script = "uid://b1km6i66574xg"
 
-[node name="Differential" type="Node" parent="Transmission"]
+[node name="Differential" type="Node" parent="Transmission" unique_id=1760802173]
 script = ExtResource("6_0a8ww")
 metadata/_custom_type_script = "uid://caxh3yxhb6k6f"
 
-[node name="AirDrag" type="Node" parent="."]
+[node name="AirDrag" type="Node" parent="." unique_id=526684335]
 script = ExtResource("7_rnfmb")
 
-[node name="PlayerController" type="Node" parent="."]
+[node name="PlayerController" type="Node" parent="." unique_id=202538131]
 script = ExtResource("7_xyd2h")
 transmission_path = NodePath("../Transmission")
 
-[node name="MotorSound" type="AudioStreamPlayer3D" parent="."]
+[node name="MotorSound" type="AudioStreamPlayer3D" parent="." unique_id=1596096882]
 stream = ExtResource("6_pmh4a")
 script = ExtResource("7_0a8ww")
 _motor_path = NodePath("../Transmission/Motor")
 
-[node name="WheelFR" type="VehicleWheel3D" parent="."]
+[node name="WheelFR" type="VehicleWheel3D" parent="." unique_id=1375443373]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.78, -0.6, 1.35)
 use_as_steering = true
 wheel_roll_influence = 0.0
@@ -69,13 +70,13 @@ suspension_travel = 2.0
 suspension_stiffness = 40.0
 damping_compression = 0.88
 
-[node name="CSGCylinder3D" type="CSGCylinder3D" parent="WheelFR"]
+[node name="CSGCylinder3D" type="CSGCylinder3D" parent="WheelFR" unique_id=1484325058]
 transform = Transform3D(-4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0, 0, 1, 0, 0, 0)
 radius = 0.316
 height = 0.2
-sides = 6
+material = ExtResource("11_pxc1e")
 
-[node name="WheelFL" type="VehicleWheel3D" parent="."]
+[node name="WheelFL" type="VehicleWheel3D" parent="." unique_id=1132578288]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.78, -0.6, 1.35)
 use_as_steering = true
 wheel_roll_influence = 0.0
@@ -85,13 +86,13 @@ suspension_travel = 2.0
 suspension_stiffness = 40.0
 damping_compression = 0.88
 
-[node name="CSGCylinder3D" type="CSGCylinder3D" parent="WheelFL"]
+[node name="CSGCylinder3D" type="CSGCylinder3D" parent="WheelFL" unique_id=1445821347]
 transform = Transform3D(-4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0, 0, 1, 0, 0, 0)
 radius = 0.316
 height = 0.2
-sides = 6
+material = ExtResource("11_pxc1e")
 
-[node name="WheelRR" type="VehicleWheel3D" parent="."]
+[node name="WheelRR" type="VehicleWheel3D" parent="." unique_id=553354118]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.78, -0.6, -1.35)
 use_as_traction = true
 wheel_roll_influence = 0.0
@@ -101,13 +102,13 @@ suspension_travel = 2.0
 suspension_stiffness = 40.0
 damping_compression = 0.88
 
-[node name="CSGCylinder3D" type="CSGCylinder3D" parent="WheelRR"]
+[node name="CSGCylinder3D" type="CSGCylinder3D" parent="WheelRR" unique_id=1826151490]
 transform = Transform3D(-4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0, 0, 1, 0, 0, 0)
 radius = 0.316
 height = 0.2
-sides = 6
+material = ExtResource("11_pxc1e")
 
-[node name="WheelRL" type="VehicleWheel3D" parent="."]
+[node name="WheelRL" type="VehicleWheel3D" parent="." unique_id=851924104]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.78, -0.6, -1.35)
 use_as_traction = true
 wheel_roll_influence = 0.0
@@ -117,15 +118,15 @@ suspension_travel = 2.0
 suspension_stiffness = 40.0
 damping_compression = 0.88
 
-[node name="CSGCylinder3D" type="CSGCylinder3D" parent="WheelRL"]
+[node name="CSGCylinder3D" type="CSGCylinder3D" parent="WheelRL" unique_id=760185263]
 transform = Transform3D(-4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0, 0, 1, 0, 0, 0)
 radius = 0.316
 height = 0.2
-sides = 6
+material = ExtResource("11_pxc1e")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=816302710]
 shape = SubResource("BoxShape3D_a1o35")
 
-[node name="CSGBox3D" type="CSGBox3D" parent="CollisionShape3D"]
+[node name="CSGBox3D" type="CSGBox3D" parent="CollisionShape3D" unique_id=1523249238]
 size = Vector3(1.8, 1, 4.65)
 material = SubResource("StandardMaterial3D_a1o35")

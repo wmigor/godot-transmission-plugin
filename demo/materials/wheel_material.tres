@@ -1,0 +1,11 @@
+[gd_resource type="ShaderMaterial" format=3 uid="uid://dl7heyuc3vee8"]
+
+[ext_resource type="Shader" uid="uid://bpdpwl1xyigvy" path="res://demo/materials/chess_board_shader.gdshader" id="1_qv3xj"]
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_qv3xj")
+shader_parameter/color_a = Color(1, 1, 1, 1)
+shader_parameter/color_b = Color(0.45882353, 0.45882353, 0.45882353, 1)
+shader_parameter/cell_size = 1.0
+shader_parameter/use_world_position = false
