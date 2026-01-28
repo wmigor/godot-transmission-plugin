@@ -18,7 +18,7 @@ script = ExtResource("3_rnfmb")
 metadata/_custom_type_script = "uid://cs2l3kwhehf8r"
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_a1o35"]
-size = Vector3(1.8, 0.5, 4.65)
+size = Vector3(1.8, 1, 4.65)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_a1o35"]
 transparency = 1

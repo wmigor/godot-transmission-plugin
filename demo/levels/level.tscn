@@ -19,6 +19,9 @@ size = Vector3(1000, 1, 1000)
 [sub_resource type="BoxShape3D" id="BoxShape3D_pyw84"]
 size = Vector3(100, 1, 300)
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_pb38g"]
+size = Vector3(2000, 1, 2000)
+
 [node name="Level" type="Node3D" unique_id=1522158654]
 script = ExtResource("1_okbl5")
 car_scenes = Array[PackedScene]([ExtResource("4_ya3gt"), ExtResource("2_ya3gt")])
@@ -39,14 +42,26 @@ size = Vector3(1000, 1, 1000)
 material = ExtResource("3_pb38g")
 
 [node name="Tramplin" type="StaticBody3D" parent="." unique_id=1978287518]
-transform = Transform3D(1, 0, 0, 0, 0.98480767, 0.17364816, 0, -0.17364816, 0.98480767, 0, 25, 300)
+transform = Transform3D(1, 0, 0, 0, 0.9999999, 0, 0, 0, 0.9999999, 0, 25, 300)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Tramplin" unique_id=490430042]
+transform = Transform3D(1, 0, 0, 0, 0.9848077, 0.17364818, 0, -0.17364818, 0.9848077, 0, 0, 0)
 shape = SubResource("BoxShape3D_pyw84")
 
 [node name="CSGBox3D" type="CSGBox3D" parent="Tramplin/CollisionShape3D" unique_id=1340194199]
 transform = Transform3D(1, 0, 0, 0, 1.0000002, 0, 0, 0, 1.0000002, 0, 0, 0)
+cast_shadow = 0
 size = Vector3(100, 1, 300)
+material = ExtResource("3_pb38g")
+
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="Tramplin" unique_id=1763536323]
+transform = Transform3D(1, 0, 0, 0, 1.0000001, 0, 0, 0, 1.0000001, 1000, 25.922, 1147.47)
+shape = SubResource("BoxShape3D_pb38g")
+
+[node name="CSGBox3D" type="CSGBox3D" parent="Tramplin/CollisionShape3D2" unique_id=1994063989]
+transform = Transform3D(1, 0, 0, 0, 1.0000002, 0, 0, 0, 1.0000002, 0, 0, 0)
+cast_shadow = 0
+size = Vector3(2000, 1, 2000)
 material = ExtResource("3_pb38g")
 
 [node name="Sun" type="DirectionalLight3D" parent="." unique_id=819319598]
