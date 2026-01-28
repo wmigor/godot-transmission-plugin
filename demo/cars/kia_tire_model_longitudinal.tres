@@ -1,0 +1,7 @@
+[gd_resource type="Resource" script_class="TireModel" format=3 uid="uid://b1eknvdfri7ct"]
+
+[ext_resource type="Script" uid="uid://dda7gnseg0gon" path="res://addons/transmission/scripts/tire_model.gd" id="1_isrjt"]
+
+[resource]
+script = ExtResource("1_isrjt")
+metadata/_custom_type_script = "uid://dda7gnseg0gon"

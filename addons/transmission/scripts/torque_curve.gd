@@ -35,7 +35,7 @@ class_name TorqueCurve
 		emit_changed()
 
 
-@export_range(0.0, 1.0, 0.01) var drop_torque := 0.8:
+@export_range(0.0, 1.0, 0.01) var drop_torque := 0.95:
 	set(value):
 		drop_torque = value
 		emit_changed()

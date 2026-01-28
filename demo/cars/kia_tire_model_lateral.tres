@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="TireModel" format=3 uid="uid://b04dapay0xfen"]
+
+[ext_resource type="Script" uid="uid://dda7gnseg0gon" path="res://addons/transmission/scripts/tire_model.gd" id="1_b5nic"]
+
+[resource]
+script = ExtResource("1_b5nic")
+peak = 1.0
+stiffness = 8.0
+shape = 1.3
+curvature = 0.9
+metadata/_custom_type_script = "uid://dda7gnseg0gon"

@@ -10,7 +10,7 @@ var clutch_locked := false
 func calculate(delta: float, motor: Motor, differential: Differential, gear: float) -> void:
 	if input_value <= 0.0 or motor.rpm <= motor.torque_curve.idle_rpm:
 		motor.apply_torque(delta, motor.torque)
-		differential.apply_torque(0.0)
+		differential.apply_torque(delta, 0.0)
 		clutch_locked = false
 		return
 	var clutch_max_torque := motor.torque_curve.max_torque * max_torque_factor * input_value * input_value
@@ -27,10 +27,10 @@ func calculate(delta: float, motor: Motor, differential: Differential, gear: flo
 		var new_av_delta := new_differential_av - new_motor_av
 		if new_av_delta * av_delta >= 0.0:
 			motor.apply_torque(delta, motor_torque)
-			differential.apply_torque(-clutch_torque * gear)
+			differential.apply_torque(delta, -clutch_torque * gear)
 			return
 	motor.angular_velocity = (motor.angular_velocity * motor.inertia + axle_av * axle_inertia) / (motor.inertia + axle_inertia)
 	clutch_locked = true
-	motor.apply_torque(delta, motor.torque + axle_torque, motor.inertia + axle_inertia)
+	motor.apply_torque(delta, motor.torque + axle_torque, axle_inertia)
 	motor.rpm = max(motor.rpm, motor.torque_curve.idle_rpm)
-	differential.apply_torque(((motor.angular_velocity - axle_av) * axle_inertia / delta - axle_torque) * gear)
+	differential.apply_torque(delta, ((motor.angular_velocity - axle_av) * axle_inertia / delta - axle_torque) * gear)

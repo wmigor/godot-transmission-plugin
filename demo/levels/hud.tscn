@@ -1,0 +1,89 @@
+[gd_scene format=3 uid="uid://1pcygxlnx2lh"]
+
+[ext_resource type="Script" uid="uid://cxqca08disbkv" path="res://demo/levels/hud.gd" id="1_43mbw"]
+[ext_resource type="Script" uid="uid://0uih300hbbra" path="res://demo/levels/rpm_view.gd" id="2_i0li5"]
+
+[node name="Hud" type="CanvasLayer" unique_id=1886024653]
+script = ExtResource("1_43mbw")
+
+[node name="Grid" type="GridContainer" parent="." unique_id=206244026]
+offset_right = 206.0
+offset_bottom = 210.0
+columns = 2
+
+[node name="RpmLabel" type="Label" parent="Grid" unique_id=479273137]
+layout_mode = 2
+text = "RPM"
+
+[node name="Rpm" type="Label" parent="Grid" unique_id=974264118]
+layout_mode = 2
+text = "0"
+
+[node name="SpeedLabel" type="Label" parent="Grid" unique_id=525878875]
+layout_mode = 2
+text = "Speed"
+
+[node name="Speed" type="Label" parent="Grid" unique_id=1772537770]
+layout_mode = 2
+text = "0"
+
+[node name="GearLabel" type="Label" parent="Grid" unique_id=707703820]
+layout_mode = 2
+text = "Gear"
+
+[node name="Gear" type="Label" parent="Grid" unique_id=1440857715]
+layout_mode = 2
+text = "0"
+
+[node name="ThrottleLabel" type="Label" parent="Grid" unique_id=311844819]
+layout_mode = 2
+text = "Throttle"
+
+[node name="Throttle" type="Label" parent="Grid" unique_id=1765656002]
+layout_mode = 2
+text = "0"
+
+[node name="ClutchLabel" type="Label" parent="Grid" unique_id=33633067]
+layout_mode = 2
+text = "Clutch"
+
+[node name="Clutch" type="Label" parent="Grid" unique_id=1328780174]
+layout_mode = 2
+text = "0"
+
+[node name="RpmView" type="Control" parent="." unique_id=685590663]
+layout_mode = 3
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 71.0
+offset_top = -250.0
+offset_right = 271.0
+offset_bottom = -50.0
+grow_vertical = 0
+script = ExtResource("2_i0li5")
+
+[node name="Timer" type="Label" parent="." unique_id=1313359070]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -95.0
+offset_right = 95.0
+offset_bottom = 23.0
+grow_horizontal = 2
+text = "0"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Title" type="Label" parent="." unique_id=170144279]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -266.0
+offset_top = 30.0
+offset_right = 274.0
+offset_bottom = 53.0
+grow_horizontal = 2
+text = "title"
+horizontal_alignment = 1
+vertical_alignment = 1
