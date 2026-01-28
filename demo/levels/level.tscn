@@ -5,11 +5,19 @@
 [ext_resource type="Material" uid="uid://d05elpucmkqy3" path="res://demo/materials/chess_board_material.tres" id="3_pb38g"]
 [ext_resource type="PackedScene" uid="uid://1pcygxlnx2lh" path="res://demo/levels/hud.tscn" id="4_8b0ir"]
 [ext_resource type="PackedScene" uid="uid://cq3ew1aafdrkt" path="res://demo/cars/kia_rio_sim.tscn" id="4_ya3gt"]
+[ext_resource type="Script" uid="uid://c3eqoy67l6cmi" path="res://demo/levels/ground.gd" id="5_pb38g"]
 
-[sub_resource type="WorldBoundaryShape3D" id="WorldBoundaryShape3D_a1o35"]
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_pb38g"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_ya3gt"]
+generate_mipmaps = false
+noise = SubResource("FastNoiseLite_pb38g")
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_ystn6"]
+size = Vector3(1000, 1, 1000)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_pyw84"]
-size = Vector3(150, 1, 300)
+size = Vector3(100, 1, 300)
 
 [node name="Level" type="Node3D" unique_id=1522158654]
 script = ExtResource("1_okbl5")
@@ -18,24 +26,27 @@ car_scenes = Array[PackedScene]([ExtResource("4_ya3gt"), ExtResource("2_ya3gt")]
 [node name="Hud" parent="." unique_id=1886024653 instance=ExtResource("4_8b0ir")]
 
 [node name="Ground" type="StaticBody3D" parent="." unique_id=868433706]
+script = ExtResource("5_pb38g")
+height_map_texture = SubResource("NoiseTexture2D_ya3gt")
+ground_material = ExtResource("3_pb38g")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Ground" unique_id=2111914354]
-shape = SubResource("WorldBoundaryShape3D_a1o35")
-
-[node name="CSGBox3D" type="CSGBox3D" parent="Ground" unique_id=332403163]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
-size = Vector3(2000, 1, 2000)
+shape = SubResource("BoxShape3D_ystn6")
+
+[node name="CSGBox3D" type="CSGBox3D" parent="Ground/CollisionShape3D" unique_id=332403163]
+size = Vector3(1000, 1, 1000)
 material = ExtResource("3_pb38g")
 
 [node name="Tramplin" type="StaticBody3D" parent="." unique_id=1978287518]
-transform = Transform3D(1, 0, 0, 0, 0.9659258, 0.25881904, 0, -0.25881904, 0.9659258, 0, 35, 400)
+transform = Transform3D(1, 0, 0, 0, 0.98480767, 0.17364816, 0, -0.17364816, 0.98480767, 0, 25, 300)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Tramplin" unique_id=490430042]
 shape = SubResource("BoxShape3D_pyw84")
 
-[node name="CSGBox3D" type="CSGBox3D" parent="Tramplin" unique_id=1340194199]
-transform = Transform3D(1, 0, 0, 0, 1.0000001, 0, 0, 0, 1.0000001, 0, 0, 0)
-size = Vector3(150, 1, 300)
+[node name="CSGBox3D" type="CSGBox3D" parent="Tramplin/CollisionShape3D" unique_id=1340194199]
+transform = Transform3D(1, 0, 0, 0, 1.0000002, 0, 0, 0, 1.0000002, 0, 0, 0)
+size = Vector3(100, 1, 300)
 material = ExtResource("3_pb38g")
 
 [node name="Sun" type="DirectionalLight3D" parent="." unique_id=819319598]

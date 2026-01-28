@@ -68,7 +68,7 @@ func calculate_force(delta: float, velocity: Vector3) -> Vector3:
 	var normal := _ray_cast.get_collision_normal() if _ray_cast.is_colliding() else spring_direction
 	var right := global_basis.x
 	var forward := normal.cross(right)
-	var spring_force := _calculate_spring_force(delta, spring_direction)
+	var spring_force := _calculate_spring_force_simple(delta, spring_direction, velocity)
 	var tyre_force := _calculate_tyre_force(velocity, spring_force, forward)
 	torque = -tyre_force.dot(forward) * radius
 	return tyre_force + (spring_force + stabilizer_force) * spring_direction
