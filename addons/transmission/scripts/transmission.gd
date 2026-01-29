@@ -8,6 +8,7 @@ class_name Transmission
 @onready var gear_box := $GearBox as GearBox
 @onready var clutch := $Clutch as Clutch
 @onready var differential := $Differential as Differential
+@onready var auto_shift_gear := find_child("AutoShiftGear") as AutoShiftGear
 
 var _anti_roll_bars: Array[AntiRollBar]
 
@@ -29,3 +30,5 @@ func _physics_process(delta: float) -> void:
 	motor.update_torque()
 	clutch.calculate(delta, motor, differential, gear_box.gear)
 	differential.after_update(delta, clutch.input_value * motor.input_throttle <= 0.05, input_brake)
+	if auto_shift_gear != null:
+		auto_shift_gear.update(delta, gear_box, motor)

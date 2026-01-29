@@ -9,6 +9,7 @@
 [ext_resource type="Script" uid="uid://dw6p250u8k151" path="res://addons/transmission/scripts/differential_sim.gd" id="7_t10y5"]
 [ext_resource type="Script" uid="uid://d4akcfjaax1nv" path="res://addons/transmission/scripts/air_drag.gd" id="7_umqcv"]
 [ext_resource type="Script" uid="uid://c8rwsbbak0tb7" path="res://demo/cars/player_controller.gd" id="8_d8bn6"]
+[ext_resource type="Script" uid="uid://stfmx5vx085t" path="res://addons/transmission/scripts/auto_shift_gear.gd" id="8_umqcv"]
 [ext_resource type="Script" uid="uid://b5nw71cdlt3oa" path="res://addons/transmission/scripts/anti_roll_bar.gd" id="8_wlx43"]
 [ext_resource type="AudioStream" uid="uid://h0y02xnqgri3" path="res://demo/sounds/engine.wav" id="9_mjw80"]
 [ext_resource type="Script" uid="uid://ds06hfi0ebjc8" path="res://demo/cars/motor_sound.gd" id="10_l1s00"]
@@ -53,6 +54,10 @@ metadata/_custom_type_script = "uid://b1km6i66574xg"
 [node name="Differential" type="Node" parent="Transmission" unique_id=1960830628]
 script = ExtResource("7_t10y5")
 metadata/_custom_type_script = "uid://dw6p250u8k151"
+
+[node name="AutoShiftGear" type="Node" parent="Transmission" unique_id=1693667405]
+script = ExtResource("8_umqcv")
+metadata/_custom_type_script = "uid://stfmx5vx085t"
 
 [node name="AntiRollBarF" type="Node" parent="Transmission" unique_id=31323183]
 script = ExtResource("8_wlx43")
