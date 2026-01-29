@@ -3,8 +3,8 @@
 [ext_resource type="Script" uid="uid://qefa3wx6oj50" path="res://demo/cars/car.gd" id="1_t10y5"]
 [ext_resource type="Script" uid="uid://begmy7l5i6ph2" path="res://addons/transmission/scripts/transmission.gd" id="1_ytltx"]
 [ext_resource type="Script" uid="uid://cheran6n8tw0w" path="res://addons/transmission/scripts/motor.gd" id="2_t10y5"]
-[ext_resource type="Script" uid="uid://cs2l3kwhehf8r" path="res://addons/transmission/scripts/torque_curve.gd" id="3_uxx4a"]
 [ext_resource type="Script" uid="uid://bf3blkxmxynai" path="res://addons/transmission/scripts/gear_box.gd" id="4_soqyx"]
+[ext_resource type="Resource" uid="uid://ceegqxxls7641" path="res://demo/cars/kia_rio_motor_torque.tres" id="4_wlx43"]
 [ext_resource type="Script" uid="uid://b1km6i66574xg" path="res://addons/transmission/scripts/clutch.gd" id="5_qx2ah"]
 [ext_resource type="Script" uid="uid://dw6p250u8k151" path="res://addons/transmission/scripts/differential_sim.gd" id="7_t10y5"]
 [ext_resource type="Script" uid="uid://d4akcfjaax1nv" path="res://addons/transmission/scripts/air_drag.gd" id="7_umqcv"]
@@ -16,10 +16,6 @@
 [ext_resource type="Script" uid="uid://bf82tsplvyp87" path="res://addons/transmission/scripts/wheel.gd" id="12_uxx4a"]
 [ext_resource type="Resource" uid="uid://b1eknvdfri7ct" path="res://demo/cars/kia_tire_model_longitudinal.tres" id="13_qx2ah"]
 [ext_resource type="Resource" uid="uid://b04dapay0xfen" path="res://demo/cars/kia_tire_model_lateral.tres" id="14_wlx43"]
-
-[sub_resource type="Resource" id="Resource_rnfmb"]
-script = ExtResource("3_uxx4a")
-metadata/_custom_type_script = "uid://cs2l3kwhehf8r"
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_a1o35"]
 size = Vector3(1.8, 0.5, 4.65)
@@ -43,7 +39,7 @@ metadata/_custom_type_script = "uid://begmy7l5i6ph2"
 
 [node name="Motor" type="Node" parent="Transmission" unique_id=15648613]
 script = ExtResource("2_t10y5")
-torque_curve = SubResource("Resource_rnfmb")
+torque_curve = ExtResource("4_wlx43")
 metadata/_custom_type_script = "uid://cheran6n8tw0w"
 
 [node name="GearBox" type="Node" parent="Transmission" unique_id=1007152266]

@@ -1,0 +1,7 @@
+[gd_resource type="Resource" script_class="TorqueCurve" format=3 uid="uid://ceegqxxls7641"]
+
+[ext_resource type="Script" uid="uid://cs2l3kwhehf8r" path="res://addons/transmission/scripts/torque_curve.gd" id="1_8etxm"]
+
+[resource]
+script = ExtResource("1_8etxm")
+metadata/_custom_type_script = "uid://cs2l3kwhehf8r"

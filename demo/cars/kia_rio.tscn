@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://qefa3wx6oj50" path="res://demo/cars/car.gd" id="1_2r43q"]
 [ext_resource type="Script" uid="uid://begmy7l5i6ph2" path="res://addons/transmission/scripts/transmission.gd" id="2_xghl0"]
 [ext_resource type="Script" uid="uid://cheran6n8tw0w" path="res://addons/transmission/scripts/motor.gd" id="3_dwa0m"]
-[ext_resource type="Script" uid="uid://cs2l3kwhehf8r" path="res://addons/transmission/scripts/torque_curve.gd" id="3_rnfmb"]
+[ext_resource type="Resource" uid="uid://ceegqxxls7641" path="res://demo/cars/kia_rio_motor_torque.tres" id="4_2r43q"]
 [ext_resource type="Script" uid="uid://bf3blkxmxynai" path="res://addons/transmission/scripts/gear_box.gd" id="4_4qqoo"]
 [ext_resource type="Script" uid="uid://b1km6i66574xg" path="res://addons/transmission/scripts/clutch.gd" id="5_2j28c"]
 [ext_resource type="Script" uid="uid://caxh3yxhb6k6f" path="res://addons/transmission/scripts/differential_vehicle_wheel.gd" id="6_0a8ww"]
@@ -12,10 +12,6 @@
 [ext_resource type="Script" uid="uid://d4akcfjaax1nv" path="res://addons/transmission/scripts/air_drag.gd" id="7_rnfmb"]
 [ext_resource type="Script" uid="uid://c8rwsbbak0tb7" path="res://demo/cars/player_controller.gd" id="7_xyd2h"]
 [ext_resource type="Material" uid="uid://dl7heyuc3vee8" path="res://demo/materials/wheel_material.tres" id="11_pxc1e"]
-
-[sub_resource type="Resource" id="Resource_rnfmb"]
-script = ExtResource("3_rnfmb")
-metadata/_custom_type_script = "uid://cs2l3kwhehf8r"
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_a1o35"]
 size = Vector3(1.8, 1, 4.65)
@@ -38,7 +34,7 @@ metadata/_custom_type_script = "uid://begmy7l5i6ph2"
 
 [node name="Motor" type="Node" parent="Transmission" unique_id=15648613]
 script = ExtResource("3_dwa0m")
-torque_curve = SubResource("Resource_rnfmb")
+torque_curve = ExtResource("4_2r43q")
 metadata/_custom_type_script = "uid://cheran6n8tw0w"
 
 [node name="GearBox" type="Node" parent="Transmission" unique_id=1007152266]
