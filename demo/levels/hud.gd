@@ -7,6 +7,7 @@ class_name Hud
 @onready var throttle_label := $Grid/Throttle as Label
 @onready var clutch_label := $Grid/Clutch as Label
 @onready var timer_label := $Timer as Label
+@onready var torque_label := $Grid/Torque as Label
 @onready var title := $Title as Label
 @onready var rpm_view := $RpmView
 
@@ -27,3 +28,4 @@ func _process(_delta: float) -> void:
 	throttle_label.text = str(snappedf(transmission.motor.input_throttle, 0.01))
 	clutch_label.text = str(snappedf(transmission.clutch.input_value, 0.01)) + (" Locked" if transmission.clutch.clutch_locked else " Free")
 	timer_label.text = str(snappedf(Time.get_ticks_msec() / 1000.0, 0.1))
+	torque_label.text = str(roundi(car.transmission.motor.torque)) + " (" + str(roundi(car.transmission.motor.torque * car.transmission.gear_box.gear)) + ")"

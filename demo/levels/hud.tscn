@@ -51,6 +51,14 @@ text = "Clutch"
 layout_mode = 2
 text = "0"
 
+[node name="TorqueLabel" type="Label" parent="Grid" unique_id=2035978142]
+layout_mode = 2
+text = "Torque"
+
+[node name="Torque" type="Label" parent="Grid" unique_id=777376302]
+layout_mode = 2
+text = "0"
+
 [node name="RpmView" type="Control" parent="." unique_id=685590663]
 layout_mode = 3
 anchors_preset = 2
