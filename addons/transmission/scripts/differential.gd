@@ -19,4 +19,4 @@ func get_axle_torque() -> float
 func update(delta: float, input_steering: float) -> void
 
 @abstract
-func after_update(delta: float, free: bool, input_brake: float) -> void
+func after_update(delta: float, free: bool, input_brake: float, input_hand_brake: float) -> void

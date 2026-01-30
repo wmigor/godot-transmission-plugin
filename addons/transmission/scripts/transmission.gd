@@ -3,6 +3,7 @@ class_name Transmission
 
 @export_range(-1.0, 1.0, 0.001) var input_steering: float
 @export_range(-1.0, 1.0, 0.001) var input_brake: float
+@export_range(-1.0, 1.0, 0.001) var input_hand_brake: float
 
 @onready var motor := $Motor as Motor
 @onready var gear_box := $GearBox as GearBox
@@ -28,4 +29,4 @@ func _physics_process(delta: float) -> void:
 	gear_box.update(clutch)
 	motor.update_torque()
 	clutch.calculate(delta, motor, differential, gear_box.gear)
-	differential.after_update(delta, clutch.input_value * motor.input_throttle <= 0.05, input_brake)
+	differential.after_update(delta, clutch.input_value * motor.input_throttle <= 0.05, input_brake, input_hand_brake)

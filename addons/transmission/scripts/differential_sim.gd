@@ -90,8 +90,9 @@ func update(delta: float, input_steering: float) -> void:
 		_vehicle.apply_force(force, arm)
 
 
-func after_update(delta: float, free: bool, input_brake: float) -> void:
+func after_update(delta: float, free: bool, input_brake: float, input_hand_brake: float) -> void:
 	for wheel in _free_wheels:
 		wheel.apply_torque(delta)
 	for wheel in _wheels:
-		wheel.update_rotation(delta, free, input_brake)
+		var brake := maxf(input_brake, input_hand_brake) if wheel.hand_brakable else input_brake
+		wheel.update_rotation(delta, free, brake)

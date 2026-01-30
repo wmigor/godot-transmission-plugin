@@ -59,6 +59,22 @@ text = "Torque"
 layout_mode = 2
 text = "0"
 
+[node name="BrakeLabel" type="Label" parent="Grid" unique_id=141489672]
+layout_mode = 2
+text = "Brake"
+
+[node name="Brake" type="Label" parent="Grid" unique_id=657969]
+layout_mode = 2
+text = "0"
+
+[node name="ModeLabel" type="Label" parent="Grid" unique_id=1674981273]
+layout_mode = 2
+text = "Mode"
+
+[node name="Mode" type="Label" parent="Grid" unique_id=1202946915]
+layout_mode = 2
+text = "0"
+
 [node name="RpmView" type="Control" parent="." unique_id=685590663]
 layout_mode = 3
 anchors_preset = 2
