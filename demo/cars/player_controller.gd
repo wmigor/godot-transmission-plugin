@@ -26,7 +26,7 @@ func _physics_process(delta: float) -> void:
 		transmission.input_brake = clampf(brake_input + _brake_key, 0.0, 1.0)
 		var clutch_input := Input.get_action_strength("clutch") if clutch_mode else 0.0
 		transmission.clutch.input_value = 1.0 - clampf(clutch_input + _clutch_key, 0.0, 1.0)
-		if transmission.input_hand_brake > 0.0:
+		if transmission.input_hand_brake > 0.0 or transmission.motor.rpm <= transmission.motor.torque_curve.idle_rpm:
 			transmission.clutch.input_value = 0.0
 
 

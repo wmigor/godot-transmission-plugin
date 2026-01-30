@@ -26,7 +26,6 @@ func _physics_process(delta: float) -> void:
 	for anti_roll_bar in _anti_roll_bars:
 		anti_roll_bar.update_forces()
 	differential.update(delta, input_steering)
-	gear_box.update(clutch)
 	motor.update_torque()
 	clutch.calculate(delta, motor, differential, gear_box.gear)
 	differential.after_update(delta, clutch.input_value * motor.input_throttle <= 0.05, input_brake, input_hand_brake)

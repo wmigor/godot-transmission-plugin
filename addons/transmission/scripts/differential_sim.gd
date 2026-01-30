@@ -71,7 +71,7 @@ func get_axle_torque() -> float:
 		return 0.0
 	var axle_torque := 0.0
 	for wheel in _traction_wheels:
-		axle_torque += wheel.torque
+		axle_torque += wheel.torque + wheel.brake_torque
 	return axle_torque / len(_traction_wheels)
 
 
