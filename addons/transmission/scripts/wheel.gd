@@ -9,7 +9,7 @@ class_name Wheel
 @export var inertia := 1.2
 @export var tire_model_longitudinal: TireModel
 @export var tire_model_lateral: TireModel
-@export var max_brake_torque := 5000.0
+@export var max_brake_torque := 2000.0
 
 @export_category("Spring")
 @export var spring_stiffness := 20000.0
@@ -111,6 +111,9 @@ func apply_torque(delta: float) -> void:
 
 
 func update_rotation(delta: float, free: bool, brake: float) -> void:
+	brake_torque = -signf(angular_velocity) * brake * max_brake_torque
+	if free and (absf(brake_torque) > 0.0 or not use_as_traction):
+		free = false
 	if free and (_forward_velocity - angular_velocity * radius) * (_forward_velocity - _old_av * radius) < 0.0:
 		angular_velocity = _forward_velocity / radius
 		_old_av = angular_velocity
@@ -119,7 +122,6 @@ func update_rotation(delta: float, free: bool, brake: float) -> void:
 		angular_velocity = _old_av + (angular_velocity - _old_av) * 0.5
 		_old_av = old_av
 
-	brake_torque = -signf(angular_velocity) * brake * max_brake_torque
 	var dv := delta * brake_torque / inertia
 	if absf(dv) > absf(angular_velocity):
 		dv = -angular_velocity
