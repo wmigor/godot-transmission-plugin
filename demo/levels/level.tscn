@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://1pcygxlnx2lh" path="res://demo/levels/hud.tscn" id="4_8b0ir"]
 [ext_resource type="PackedScene" uid="uid://cq3ew1aafdrkt" path="res://demo/cars/kia_rio_sim.tscn" id="4_ya3gt"]
 [ext_resource type="Script" uid="uid://c3eqoy67l6cmi" path="res://demo/levels/ground.gd" id="5_pb38g"]
+[ext_resource type="Material" uid="uid://dl7heyuc3vee8" path="res://demo/materials/wheel_material.tres" id="7_ya3gt"]
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_pb38g"]
 
@@ -15,6 +16,9 @@ noise = SubResource("FastNoiseLite_pb38g")
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_ystn6"]
 size = Vector3(1000, 1, 1000)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_2spen"]
+size = Vector3(20, 0.6, 0.6)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_pyw84"]
 size = Vector3(100, 1, 300)
@@ -40,6 +44,14 @@ shape = SubResource("BoxShape3D_ystn6")
 [node name="CSGBox3D" type="CSGBox3D" parent="Ground/CollisionShape3D" unique_id=332403163]
 size = Vector3(1000, 1, 1000)
 material = ExtResource("3_pb38g")
+
+[node name="Border" type="CollisionShape3D" parent="Ground" unique_id=1774512745]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 25, 0, 90)
+shape = SubResource("BoxShape3D_2spen")
+
+[node name="CSGBox3D" type="CSGBox3D" parent="Ground/Border" unique_id=1745792011]
+size = Vector3(20, 0.6, 0.6)
+material = ExtResource("7_ya3gt")
 
 [node name="Tramplin" type="StaticBody3D" parent="." unique_id=1978287518]
 transform = Transform3D(1, 0, 0, 0, 0.9999999, 0, 0, 0, 0.9999999, 0, 25, 300)
