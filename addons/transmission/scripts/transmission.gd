@@ -15,6 +15,8 @@ var _anti_roll_bars: Array[AntiRollBar]
 
 func _ready() -> void:
 	_anti_roll_bars.append_array(find_children("*", "AntiRollBar"))
+	set_physics_process(false)
+	set_physics_process.call_deferred(true)
 
 
 func _physics_process(delta: float) -> void:
