@@ -1,7 +1,9 @@
 extends Differential
 class_name DifferentialSim
 
-@export var auto_differential := true
+enum Type {Auto, Open, Spool}
+
+@export var type := Type.Auto
 @export var auto_differential_lock_input_torque := 25.0
 @export var auto_differential_slip_max := 0.35
 
@@ -29,13 +31,20 @@ func _ready() -> void:
 func apply_torque(delta: float, input_torque: float) -> void:
 	if len(_traction_wheels) != 2:
 		return
-	if not auto_differential:
+	if type == Type.Spool:
+		var axle_av := get_axle_angular_velocity()
+		var axle_inertia := get_axle_inertia()
+		var axle_torque := get_axle_torque() * len(_traction_wheels)
+		axle_av += delta * (input_torque + axle_torque) / axle_inertia
+		_traction_wheels[0].torque = (axle_av - _traction_wheels[0].angular_velocity) * _traction_wheels[0].inertia / delta
+		_traction_wheels[1].torque = (axle_av - _traction_wheels[1].angular_velocity) * _traction_wheels[1].inertia / delta
+	elif type == Type.Open:
 		var spider_torque := _traction_wheels[0].torque - _traction_wheels[1].torque
 		var torque0 := input_torque * 0.5 + spider_torque
 		var torque1 := input_torque * 0.5 - spider_torque
 		_traction_wheels[0].torque += torque0
 		_traction_wheels[1].torque += torque1
-	else:
+	elif type == Type.Auto:
 		var spider_torque := _traction_wheels[0].torque - _traction_wheels[1].torque
 		var locked_torque := input_torque / auto_differential_lock_input_torque
 		var rate := 1.0 - exp(-locked_torque * locked_torque) if locked_torque > 0.0 else 0.0
