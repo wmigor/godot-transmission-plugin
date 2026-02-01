@@ -13,7 +13,7 @@ var clutch_mode := true
 
 
 func _physics_process(delta: float) -> void:
-	var target_steering_key := Input.get_axis("ui_right", "ui_left")
+	var target_steering_key := Input.get_axis("steering_right_key", "steering_left_key")
 	_steering_key = move_toward(_steering_key, target_steering_key, delta * 2.0)
 	_brake_key = move_toward(_brake_key, Input.get_action_strength("brake_key"), delta * 2.0)
 	_throttle_key = move_toward(_throttle_key, Input.get_action_strength("throttle_key"), delta * 5.0)
