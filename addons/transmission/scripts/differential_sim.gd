@@ -81,13 +81,11 @@ func update(delta: float, input_steering: float) -> void:
 	var state := PhysicsServer3D.body_get_direct_state(_vehicle.get_rid())
 	if state == null:
 		return
+	var center_of_mass := _vehicle.global_transform * state.center_of_mass_local
 	for wheel in _wheels:
 		if wheel.steer_angle_max != 0.0:
 			wheel.rotation_degrees.y = input_steering * wheel.steer_angle_max
-		var arm := wheel.get_contact_point() - _vehicle.global_transform * state.center_of_mass
-		var velocity := _vehicle.linear_velocity + _vehicle.angular_velocity.cross(arm)
-		var force := wheel.calculate_force(delta, velocity)
-		_vehicle.apply_force(force, arm)
+		wheel.calculate_force(delta, _vehicle, center_of_mass)
 
 
 func after_update(delta: float, free: bool, input_brake: float, input_hand_brake: float) -> void:

@@ -18,7 +18,7 @@
 [ext_resource type="Resource" uid="uid://b04dapay0xfen" path="res://demo/cars/kia_tire_model_lateral.tres" id="14_wlx43"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_a1o35"]
-size = Vector3(1.8, 0.5, 4.65)
+size = Vector3(1.8, 1, 4.65)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_a1o35"]
 transparency = 1
@@ -79,7 +79,7 @@ script = ExtResource("10_l1s00")
 _motor_path = NodePath("../Transmission/Motor")
 
 [node name="WheelFR" type="Node3D" parent="." unique_id=1095449092]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.78, -1, -1.35)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.78, -0.6, -1.35)
 script = ExtResource("12_uxx4a")
 steer_angle_max = 42.0
 tire_model_longitudinal = ExtResource("13_qx2ah")
@@ -93,7 +93,7 @@ height = 0.2
 material = ExtResource("11_i13qf")
 
 [node name="WheelFL" type="Node3D" parent="." unique_id=792580611]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.78, -1, -1.35)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.78, -0.6, -1.35)
 script = ExtResource("12_uxx4a")
 steer_angle_max = 42.0
 tire_model_longitudinal = ExtResource("13_qx2ah")
@@ -107,7 +107,7 @@ height = 0.2
 material = ExtResource("11_i13qf")
 
 [node name="WheelRR" type="Node3D" parent="." unique_id=953722438]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.78, -1, 1.35)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.78, -0.6, 1.35)
 script = ExtResource("12_uxx4a")
 use_as_traction = true
 hand_brakable = true
@@ -122,7 +122,7 @@ height = 0.2
 material = ExtResource("11_i13qf")
 
 [node name="WheelRL" type="Node3D" parent="." unique_id=1258236244]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.78, -1, 1.35)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.78, -0.6, 1.35)
 script = ExtResource("12_uxx4a")
 use_as_traction = true
 hand_brakable = true

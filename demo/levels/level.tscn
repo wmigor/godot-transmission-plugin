@@ -18,7 +18,7 @@ noise = SubResource("FastNoiseLite_pb38g")
 size = Vector3(1000, 1, 1000)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_2spen"]
-size = Vector3(20, 0.6, 0.6)
+size = Vector3(20, 0.3, 0.3)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_pyw84"]
 size = Vector3(100, 1, 300)
@@ -50,7 +50,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 25, 0, 90)
 shape = SubResource("BoxShape3D_2spen")
 
 [node name="CSGBox3D" type="CSGBox3D" parent="Ground/Border" unique_id=1745792011]
-size = Vector3(20, 0.6, 0.6)
+size = Vector3(20, 0.3, 0.3)
 material = ExtResource("7_ya3gt")
 
 [node name="Tramplin" type="StaticBody3D" parent="." unique_id=1978287518]
