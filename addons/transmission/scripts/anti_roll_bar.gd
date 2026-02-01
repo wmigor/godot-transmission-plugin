@@ -12,8 +12,8 @@ class_name AntiRollBar
 func update_forces() -> void:
 	if wheel1 == null or wheel2 == null:
 		return
-	var compress1 := wheel1.compress - wheel1.spring_length
-	var compress2 := wheel2.compress - wheel2.spring_length
+	var compress1 := wheel1.suspension.compress - wheel1.spring_length
+	var compress2 := wheel2.suspension.compress - wheel2.spring_length
 	var force := stiffness * (compress2 - compress1)
 	wheel1.stabilizer_force = -force
 	wheel2.stabilizer_force = force

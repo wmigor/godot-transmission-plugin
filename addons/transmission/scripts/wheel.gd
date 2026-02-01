@@ -16,6 +16,7 @@ class_name Wheel
 @export var spring_damping_compress := 4000.0
 @export var spring_damping_relax := 4000.0
 @export var spring_length := 0.5
+@export var spring_simple := true
 @export var spring_mass := 50.0
 
 @onready var _ray_cast := RayCast3D.new()
@@ -27,12 +28,12 @@ var _last_forward_force: float
 var _last_right_force: float
 var _forward_velocity: float
 var _old_av: float
-var _spring_velocity: float
-var compress: float
+var suspension: Suspension
 var stabilizer_force: float
 
 
 func _ready() -> void:
+	suspension = Suspension.new(spring_stiffness, spring_damping_compress, spring_damping_relax, spring_length, spring_mass, spring_simple)
 	var body := _get_parent_body()
 	_ray_cast.add_exception(body)
 	_ray_cast.position = body.to_local(global_position) + Vector3.UP * spring_length
@@ -136,19 +137,9 @@ func update_rotation(delta: float, free: bool, brake: float) -> void:
 
 func _calculate_spring_force(delta: float, spring_direction: Vector3) -> float:
 	var collision_compress := _get_collision_compress(spring_direction)
-	var contact := collision_compress > 0.0
-	if contact:
-		_spring_velocity = clampf((collision_compress - compress) / delta, -10.0, 10.0)
-		compress = collision_compress
-	else:
-		compress = move_toward(compress, 0.0, delta)
-		_spring_velocity = 0.0
-	global_position = _ray_cast.global_position - spring_direction * (spring_length - compress)
-	var damping := spring_damping_compress if _spring_velocity > 0.0 else spring_damping_relax
-	var force := -stabilizer_force - compress * spring_stiffness - _spring_velocity * damping
-	if not _ray_cast.is_colliding():
-		return 0.0
-	return maxf(0.0, -force)
+	var force := suspension.calculate_force(delta, collision_compress, stabilizer_force)
+	global_position = _ray_cast.global_position - spring_direction * (spring_length - suspension.compress)
+	return force
 
 
 func _get_collision_compress(spring_direction: Vector3) -> float:
