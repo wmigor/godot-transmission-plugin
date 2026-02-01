@@ -75,6 +75,14 @@ text = "Mode"
 layout_mode = 2
 text = "0"
 
+[node name="DifferentialLabel" type="Label" parent="Grid" unique_id=2004618685]
+layout_mode = 2
+text = "Differential"
+
+[node name="Differential" type="Label" parent="Grid" unique_id=1714277677]
+layout_mode = 2
+text = "0"
+
 [node name="RpmView" type="Control" parent="." unique_id=685590663]
 layout_mode = 3
 anchors_preset = 2

@@ -10,6 +10,7 @@ class_name Hud
 @onready var torque_label := $Grid/Torque as Label
 @onready var brake_label := $Grid/Brake as Label
 @onready var mode_label := $Grid/Mode as Label
+@onready var differential_label := $Grid/Differential as Label
 @onready var title := $Title as Label
 @onready var rpm_view := $RpmView
 
@@ -36,6 +37,7 @@ func _process(_delta: float) -> void:
 	timer_label.text = str(snappedf(Time.get_ticks_msec() / 1000.0, 0.1))
 	torque_label.text = str(roundi(car.transmission.motor.torque)) + " (" + str(roundi(car.transmission.motor.torque * car.transmission.gear_box.gear)) + ")"
 	brake_label.text = str(snappedf(car.transmission.input_brake, 0.01))
+	differential_label.text = car.transmission.differential.get_type_name()
 	_update_mode()
 
 

@@ -103,3 +103,15 @@ func after_update(delta: float, free: bool, input_brake: float, input_hand_brake
 	for wheel in _wheels:
 		var brake := maxf(input_brake, input_hand_brake) if wheel.hand_brakable else input_brake
 		wheel.update_rotation(delta, free, brake)
+
+
+func switch() -> void:
+	type = ((type as int + 1) % 3) as Type
+
+
+func get_type_name() -> String:
+	if type == Type.Auto:
+		return "Auto"
+	if type == Type.Open:
+		return "Open"
+	return "Spool"

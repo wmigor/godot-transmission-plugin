@@ -20,3 +20,9 @@ func update(delta: float, input_steering: float) -> void
 
 @abstract
 func after_update(delta: float, free: bool, input_brake: float, input_hand_brake: float) -> void
+
+@abstract
+func switch() -> void
+
+@abstract
+func get_type_name() -> String

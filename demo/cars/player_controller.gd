@@ -37,3 +37,5 @@ func _input(event: InputEvent) -> void:
 		transmission.gear_box.gear_down()
 	if event.is_action_pressed("mode"):
 		clutch_mode = not clutch_mode
+	if event.is_action_pressed("switch_differential"):
+		transmission.differential.switch()

@@ -55,3 +55,11 @@ func update(_delta: float, input_steering: float) -> void:
 func after_update(_delta: float, _free: bool, input_brake: float, input_hand_brake: float) -> void:
 	if _vehicle != null:
 		_vehicle.brake = (input_brake * input_hand_brake) * brake
+
+
+func switch() -> void:
+	pass
+
+
+func get_type_name() -> String:
+	return "None"
