@@ -23,8 +23,6 @@ func _physics_process(delta: float) -> void:
 	if motor == null or gear_box == null or clutch == null or differential == null:
 		return
 	var gear := gear_box.gear
-	var axle_inertia := differential.get_axle_inertia()
-	var axle_av := differential.get_axle_angular_velocity()
 	for anti_roll_bar in _anti_roll_bars:
 		anti_roll_bar.update_forces()
 	differential.update(delta, input_steering)

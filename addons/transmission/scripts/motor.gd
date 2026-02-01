@@ -24,8 +24,8 @@ func update_torque() -> void:
 		torque -= torque_curve.max_torque * torque_curve.brake_factor
 
 
-func apply_torque(delta: float, torque: float, extra_inertia := 0.0) -> void:
-	angular_velocity += torque * delta / (inertia + extra_inertia)
+func apply_torque(delta: float, torque_: float, extra_inertia := 0.0) -> void:
+	angular_velocity += torque_ * delta / (inertia + extra_inertia)
 	rpm = maxf(torque_curve.idle_rpm, rpm)
 
 

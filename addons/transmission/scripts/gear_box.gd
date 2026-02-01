@@ -16,8 +16,12 @@ var gear: float:
 
 
 func gear_up() -> void:
-	gear_index = mini(gear_index + 1, len(gears) - 1)
+	if gear_index + 1 < len(gears):
+		gear_index += 1
+		gear_changed.emit()
 
 
 func gear_down() -> void:
-	gear_index = max(gear_index - 1, 0)
+	if gear_index > 0:
+		gear_index -= 1
+		gear_changed.emit()
