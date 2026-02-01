@@ -25,6 +25,7 @@ mass = 1300.0
 center_of_mass_mode = 1
 center_of_mass = Vector3(0, -0.2, 0)
 linear_damp_mode = 1
+angular_damp_mode = 1
 script = ExtResource("1_2r43q")
 title = "Kia Rio Simple"
 
