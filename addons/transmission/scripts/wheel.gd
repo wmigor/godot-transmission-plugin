@@ -16,7 +16,7 @@ class_name Wheel
 @export var spring_damping_compress := 4000.0
 @export var spring_damping_relax := 4000.0
 @export var spring_length := 0.5
-@export var spring_simple := true
+@export var spring_simple := false
 @export var spring_mass := 50.0
 
 @onready var _ray_cast := RayCast3D.new()
@@ -67,14 +67,12 @@ func calculate_force(delta: float, body: RigidBody3D, center_of_mass: Vector3) -
 	var normal := _ray_cast.get_collision_normal() if _ray_cast.is_colliding() else spring_direction
 	var right := global_basis.x
 	var forward := normal.cross(right)
-	var spring_force := _calculate_spring_force(delta, spring_direction)
+	var force_spring_to_tire := _calculate_spring_force(delta, spring_direction, body, center_of_mass)
 	var tire_arm := get_contact_point() - center_of_mass
 	var tire_velocity := body.linear_velocity + body.angular_velocity.cross(tire_arm)
-	var tire_force := _calculate_tire_force(tire_velocity, spring_force, forward)
+	var tire_force := _calculate_tire_force(tire_velocity, force_spring_to_tire, forward)
 	torque = -tire_force.dot(forward) * radius
 	body.apply_force(tire_force, tire_arm)
-	var spring_arm := _ray_cast.global_position - center_of_mass
-	body.apply_force(spring_force * spring_direction, spring_arm)
 
 
 func _calculate_tire_force(velocity: Vector3, spring_force: float, forward: Vector3) -> Vector3:
@@ -135,11 +133,15 @@ func update_rotation(delta: float, free: bool, brake: float) -> void:
 			child.rotate_x(-angular_velocity * delta)
 
 
-func _calculate_spring_force(delta: float, spring_direction: Vector3) -> float:
+func _calculate_spring_force(delta: float, spring_direction: Vector3, body: RigidBody3D, center_of_mass: Vector3) -> float:
 	var collision_compress := _get_collision_compress(spring_direction)
 	var force := suspension.calculate_force(delta, collision_compress, stabilizer_force)
+	var spring_arm := _ray_cast.global_position - center_of_mass
+	body.apply_force(force * spring_direction, spring_arm)
 	global_position = _ray_cast.global_position - spring_direction * (spring_length - suspension.compress)
-	return force
+	if not suspension.contact:
+		return 0.0
+	return maxf(0.0, force)
 
 
 func _get_collision_compress(spring_direction: Vector3) -> float:
