@@ -11,10 +11,12 @@ class_name Transmission
 @onready var differential := $Differential as Differential
 
 var _anti_roll_bars: Array[AntiRollBar]
+var _systems: Array[System]
 
 
 func _ready() -> void:
 	_anti_roll_bars.append_array(find_children("*", "AntiRollBar"))
+	_systems.append_array(find_children("*", "System"))
 	set_physics_process(false)
 	set_physics_process.call_deferred(true)
 
@@ -29,3 +31,12 @@ func _physics_process(delta: float) -> void:
 	motor.update_torque()
 	clutch.calculate(delta, motor, differential, gear_box.gear)
 	differential.after_update(delta, clutch.input_value * motor.input_throttle <= 0.05, input_brake, input_hand_brake)
+	for system in _systems:
+		system.update(delta)
+
+
+func get_system(system_name: String) -> System:
+	for system in _systems:
+		if system.name == system_name:
+			return system
+	return null

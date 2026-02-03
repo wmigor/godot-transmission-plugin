@@ -8,6 +8,7 @@ class_name Motor
 
 var angular_velocity: float
 var torque: float
+var throttle_limit := 1.0
 
 var rpm: float:
 	get: return angular_velocity * TorqueCurve.TO_RPM
@@ -15,7 +16,7 @@ var rpm: float:
 
 
 func update_torque() -> void:
-	var throttle := input_throttle
+	var throttle := clampf(min(input_throttle, throttle_limit), 0.0, 1.0)
 	if rpm >= torque_curve.max_rpm:
 		throttle = 0.0
 	var back_torque := angular_velocity * torque_curve.brake_linear_factor

@@ -11,6 +11,7 @@
 [ext_resource type="Script" uid="uid://c8rwsbbak0tb7" path="res://demo/cars/player_controller.gd" id="8_d8bn6"]
 [ext_resource type="Script" uid="uid://b5nw71cdlt3oa" path="res://addons/transmission/scripts/anti_roll_bar.gd" id="8_wlx43"]
 [ext_resource type="AudioStream" uid="uid://h0y02xnqgri3" path="res://demo/sounds/engine.wav" id="9_mjw80"]
+[ext_resource type="Script" uid="uid://ho4ok4d4kwub" path="res://addons/transmission/scripts/systems/tcs.gd" id="9_umqcv"]
 [ext_resource type="Script" uid="uid://ds06hfi0ebjc8" path="res://demo/cars/motor_sound.gd" id="10_l1s00"]
 [ext_resource type="Material" uid="uid://dl7heyuc3vee8" path="res://demo/materials/wheel_material.tres" id="11_i13qf"]
 [ext_resource type="Script" uid="uid://bf82tsplvyp87" path="res://addons/transmission/scripts/wheel.gd" id="12_uxx4a"]
@@ -53,6 +54,9 @@ metadata/_custom_type_script = "uid://b1km6i66574xg"
 
 [node name="Differential" type="Node" parent="Transmission" unique_id=1960830628]
 script = ExtResource("7_t10y5")
+type = null
+auto_differential_lock_input_torque = null
+auto_differential_slip_max = null
 metadata/_custom_type_script = "uid://dw6p250u8k151"
 
 [node name="AntiRollBarF" type="Node" parent="Transmission" unique_id=31323183]
@@ -66,6 +70,10 @@ script = ExtResource("8_wlx43")
 wheel1_path = NodePath("../../WheelRL")
 wheel2_path = NodePath("../../WheelRR")
 metadata/_custom_type_script = "uid://b5nw71cdlt3oa"
+
+[node name="Tcs" type="Node" parent="Transmission" unique_id=1989647506]
+script = ExtResource("9_umqcv")
+metadata/_custom_type_script = "uid://ho4ok4d4kwub"
 
 [node name="AirDrag" type="Node" parent="." unique_id=526684335]
 script = ExtResource("7_umqcv")

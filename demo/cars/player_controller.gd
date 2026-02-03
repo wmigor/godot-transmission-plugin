@@ -39,3 +39,7 @@ func _input(event: InputEvent) -> void:
 		clutch_mode = not clutch_mode
 	if event.is_action_pressed("switch_differential"):
 		transmission.differential.switch()
+	if event.is_action_pressed("toggle_tcs"):
+		var tcs := transmission.get_system("Tcs")
+		if tcs != null:
+			tcs.enabled = not tcs.enabled

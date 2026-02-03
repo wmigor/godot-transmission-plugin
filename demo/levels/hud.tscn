@@ -83,6 +83,14 @@ text = "Differential"
 layout_mode = 2
 text = "0"
 
+[node name="TcsLabel" type="Label" parent="Grid" unique_id=1662683272]
+layout_mode = 2
+text = "TCS"
+
+[node name="Tcs" type="Label" parent="Grid" unique_id=1391077406]
+layout_mode = 2
+text = "0"
+
 [node name="RpmView" type="Control" parent="." unique_id=685590663]
 layout_mode = 3
 anchors_preset = 2
