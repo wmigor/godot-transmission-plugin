@@ -7,4 +7,5 @@ render_priority = 0
 shader = ExtResource("1_cf2m8")
 shader_parameter/color_a = Color(1, 1, 1, 1)
 shader_parameter/color_b = Color(0.45882353, 0.45882353, 0.45882353, 1)
-shader_parameter/cell_size = 50.0
+shader_parameter/cell_size = 25.0
+shader_parameter/use_world_position = true
