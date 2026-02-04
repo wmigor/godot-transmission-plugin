@@ -16,7 +16,9 @@
 [ext_resource type="Material" uid="uid://dl7heyuc3vee8" path="res://demo/materials/wheel_material.tres" id="11_i13qf"]
 [ext_resource type="Script" uid="uid://bf82tsplvyp87" path="res://addons/transmission/scripts/wheel.gd" id="12_uxx4a"]
 [ext_resource type="Resource" uid="uid://b1eknvdfri7ct" path="res://demo/cars/kia_tire_model_longitudinal.tres" id="13_qx2ah"]
+[ext_resource type="AudioStream" uid="uid://dycjcik66nyf0" path="res://demo/sounds/skid.wav" id="14_d8bn6"]
 [ext_resource type="Resource" uid="uid://b04dapay0xfen" path="res://demo/cars/kia_tire_model_lateral.tres" id="14_wlx43"]
+[ext_resource type="Script" uid="uid://bg5b8476cec70" path="res://demo/cars/skid_sound.gd" id="15_mjw80"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_a1o35"]
 size = Vector3(1.8, 1, 4.65)
@@ -86,6 +88,10 @@ transmission_path = NodePath("../Transmission")
 stream = ExtResource("9_mjw80")
 script = ExtResource("10_l1s00")
 _motor_path = NodePath("../Transmission/Motor")
+
+[node name="SkidSound" type="AudioStreamPlayer3D" parent="." unique_id=483830331]
+stream = ExtResource("14_d8bn6")
+script = ExtResource("15_mjw80")
 
 [node name="WheelFR" type="Node3D" parent="." unique_id=1095449092]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.78, -0.6, -1.35)

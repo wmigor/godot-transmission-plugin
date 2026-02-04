@@ -24,6 +24,7 @@ class_name Wheel
 var angular_velocity: float
 var torque: float
 var brake_torque: float
+var skid_factor: float
 var _last_forward_force: float
 var _last_right_force: float
 var _forward_velocity: float
@@ -83,6 +84,10 @@ func _calculate_tire_force(velocity: Vector3, spring_force: float, forward: Vect
 	var slip_ratio := calculate_slip_ratio(_forward_velocity)
 
 	var f := _get_tire_forces(slip_angle, slip_ratio, spring_force) if spring_force > 0.0 else Vector2.ZERO
+	if absf(_forward_velocity + angular_velocity * radius) < 1:
+		skid_factor = 0.0
+	else:
+		skid_factor = clamp(sqrt(sin(slip_angle) ** 2 + slip_ratio ** 2), 0.0, 1.0) if spring_force > 0.0 else 0.0
 	if spring_force <= 0.0:
 		_last_forward_force = 0.0
 		_last_forward_force = 0.0
