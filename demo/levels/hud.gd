@@ -33,7 +33,7 @@ func _process(_delta: float) -> void:
 	var transmission := car.transmission
 	rpm_label.text = str(int(transmission.motor.rpm))
 	speed_label.text = str(absi(int(3.6 * car.linear_velocity.dot(car.basis.z)))) + " km/h"
-	gear_label.text = str(1 + transmission.gear_box.gear_index)
+	gear_label.text = transmission.gear_box.gear_name
 	throttle_label.text = str(snappedf(transmission.motor.throttle_limit, 0.01))
 	clutch_label.text = str(snappedf(transmission.clutch.input_value, 0.01)) + (" Locked" if transmission.clutch.clutch_locked else " Free")
 	timer_label.text = str(snappedf(Time.get_ticks_msec() / 1000.0, 0.1))

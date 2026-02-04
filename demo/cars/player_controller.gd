@@ -1,6 +1,7 @@
 extends Node
 
 @export var transmission_path: NodePath
+@export var clutch_on_hand_brake := true
 
 @onready var transmission := get_node(transmission_path) as Transmission
 @onready var vehicle := get_parent() as VehicleBody3D
@@ -9,7 +10,7 @@ var _steering_key := 0.0
 var _brake_key := 0.0
 var _throttle_key := 0.0
 var _clutch_key := 0.0
-var _mouse_control := true
+var _mouse_control: bool
 var clutch_mode := true
 
 
@@ -17,7 +18,7 @@ func _physics_process(delta: float) -> void:
 	var target_steering_key := Input.get_axis("steering_right_key", "steering_left_key")
 	_steering_key = move_toward(_steering_key, target_steering_key, delta * 2.0)
 	_brake_key = move_toward(_brake_key, Input.get_action_strength("brake_key"), delta * 2.0)
-	_throttle_key = move_toward(_throttle_key, Input.get_action_strength("throttle_key"), delta * 5.0)
+	_throttle_key = move_toward(_throttle_key, maxf(Input.get_action_strength("throttle_key"), Input.get_action_strength("reverse_key")), delta * 5.0)
 	_clutch_key = move_toward(_clutch_key, Input.get_action_strength("clutch_key"), delta * 2)
 	if transmission != null:
 		transmission.input_steering = clampf(_steering_key + Input.get_axis("steering_right", "steering_left"), -1.0, 1.0)
@@ -27,7 +28,7 @@ func _physics_process(delta: float) -> void:
 		transmission.input_brake = clampf(brake_input + _brake_key, 0.0, 1.0)
 		var clutch_input := Input.get_action_strength("clutch") if clutch_mode else 0.0
 		transmission.clutch.input_value = 1.0 - clampf(clutch_input + _clutch_key, 0.0, 1.0)
-		if transmission.input_hand_brake > 0.0 or transmission.motor.rpm <= transmission.motor.torque_curve.idle_rpm:
+		if clutch_on_hand_brake and (transmission.input_hand_brake > 0.0 or transmission.motor.rpm <= transmission.motor.torque_curve.idle_rpm):
 			transmission.clutch.input_value = 0.0
 		_process_mouse_control()
 
@@ -59,3 +60,7 @@ func _input(event: InputEvent) -> void:
 	elif event.is_action_pressed("steering_left_key") or event.is_action_pressed("steering_right_key"):
 		_mouse_control = false
 		_steering_key = transmission.input_steering
+	if transmission.gear_box.gear > 0.0 and event.is_action_pressed("reverse_key"):
+		transmission.gear_box.set_reverse_gear()
+	if transmission.gear_box.gear < 0.0 and event.is_action_pressed("throttle_key"):
+		transmission.gear_box.gear_up()
