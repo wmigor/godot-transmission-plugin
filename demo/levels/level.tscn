@@ -99,7 +99,7 @@ curve = SubResource("Curve3D_ya3gt")
 
 [node name="CSGPolygon3D" type="CSGPolygon3D" parent="Track/Path3D" unique_id=1112198739]
 use_collision = true
-polygon = PackedVector2Array(-12, 0, -12, 1, 12, 1, 12, 0)
+polygon = PackedVector2Array(-13, 0, -13, 2, -12, 2, -12, 1, 12, 1, 12, 2, 13, 2, 13, 0)
 mode = 2
 path_node = NodePath("..")
 path_interval_type = 0
@@ -111,6 +111,7 @@ path_local = false
 path_continuous_u = true
 path_u_distance = 1.0
 path_joined = true
+material = ExtResource("3_pb38g")
 
 [node name="Sprite3D" type="Sprite3D" parent="Track" unique_id=1012335881]
 transform = Transform3D(-5.4639236e-06, 125, 5.4639236e-06, 0, -5.4639236e-06, 125, 125, 5.4639236e-06, 2.3883567e-13, -250.96092, 0, 329.05582)

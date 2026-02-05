@@ -20,6 +20,10 @@
 [ext_resource type="Resource" uid="uid://b04dapay0xfen" path="res://demo/cars/kia_tire_model_lateral.tres" id="14_wlx43"]
 [ext_resource type="Script" uid="uid://bg5b8476cec70" path="res://demo/cars/skid_sound.gd" id="15_mjw80"]
 
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_mjw80"]
+friction = 0.5
+bounce = 0.2
+
 [sub_resource type="BoxShape3D" id="BoxShape3D_a1o35"]
 size = Vector3(1.8, 1, 4.65)
 
@@ -30,6 +34,7 @@ albedo_color = Color(1, 0.34901962, 0.34901962, 0.52156866)
 [node name="KiaRioSim" type="VehicleBody3D" unique_id=152696280]
 transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0, 0, 0)
 mass = 1300.0
+physics_material_override = SubResource("PhysicsMaterial_mjw80")
 center_of_mass_mode = 1
 center_of_mass = Vector3(0, -0.26, 0)
 linear_damp_mode = 1
