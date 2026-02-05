@@ -34,7 +34,7 @@ func _process(_delta: float) -> void:
 	rpm_label.text = str(int(transmission.motor.rpm))
 	speed_label.text = str(absi(int(3.6 * car.linear_velocity.dot(car.basis.z)))) + " km/h"
 	gear_label.text = transmission.gear_box.gear_name
-	throttle_label.text = str(snappedf(transmission.motor.throttle_limit, 0.01))
+	throttle_label.text = str(snappedf(minf(transmission.motor.throttle_limit, transmission.motor.input_throttle), 0.01))
 	clutch_label.text = str(snappedf(transmission.clutch.input_value, 0.01)) + (" Locked" if transmission.clutch.clutch_locked else " Free")
 	timer_label.text = str(snappedf(Time.get_ticks_msec() / 1000.0, 0.1))
 	torque_label.text = str(roundi(car.transmission.motor.torque)) + " (" + str(roundi(car.transmission.motor.torque * car.transmission.gear_box.gear)) + ")"

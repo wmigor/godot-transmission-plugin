@@ -28,7 +28,7 @@ func _physics_process(delta: float) -> void:
 		transmission.input_brake = clampf(brake_input + _brake_key, 0.0, 1.0)
 		var clutch_input := Input.get_action_strength("clutch") if clutch_mode else 0.0
 		transmission.clutch.input_value = 1.0 - clampf(clutch_input + _clutch_key, 0.0, 1.0)
-		if clutch_on_hand_brake and (transmission.input_hand_brake > 0.0 or transmission.motor.rpm <= transmission.motor.torque_curve.idle_rpm):
+		if clutch_on_hand_brake and transmission.input_hand_brake > 0.0 or transmission.motor.rpm <= transmission.motor.torque_curve.idle_rpm:
 			transmission.clutch.input_value = 0.0
 		_process_mouse_control()
 
@@ -57,9 +57,11 @@ func _input(event: InputEvent) -> void:
 			tcs.enabled = not tcs.enabled
 	if event is InputEventMouseMotion:
 		_mouse_control = true
-	elif event.is_action_pressed("steering_left_key") or event.is_action_pressed("steering_right_key"):
+	elif event.is_action("steering_left_key") or event.is_action("steering_right_key"):
 		_mouse_control = false
 		_steering_key = transmission.input_steering
+	elif event.is_action("steering_left") or event.is_action("steering_right"):
+		_mouse_control = false
 	if transmission.gear_box.gear > 0.0 and event.is_action_pressed("reverse_key"):
 		transmission.gear_box.set_reverse_gear()
 	if transmission.gear_box.gear < 0.0 and event.is_action_pressed("throttle_key"):

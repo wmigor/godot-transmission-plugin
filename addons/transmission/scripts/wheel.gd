@@ -16,7 +16,7 @@ class_name Wheel
 @export var spring_damping_compress := 4000.0
 @export var spring_damping_relax := 4000.0
 @export var spring_length := 0.5
-@export var spring_simple := false
+@export var spring_simple := true
 @export var spring_mass := 50.0
 
 @onready var _ray_cast := RayCast3D.new()
@@ -84,7 +84,7 @@ func _calculate_tire_force(velocity: Vector3, spring_force: float, forward: Vect
 	var slip_ratio := calculate_slip_ratio(_forward_velocity)
 
 	var f := _get_tire_forces(slip_angle, slip_ratio, spring_force) if spring_force > 0.0 else Vector2.ZERO
-	if absf(_forward_velocity + angular_velocity * radius) < 1:
+	if absf(_forward_velocity + angular_velocity * radius) < TAU * radius:
 		skid_factor = 0.0
 	else:
 		skid_factor = clamp(sqrt(sin(slip_angle) ** 2 + slip_ratio ** 2), 0.0, 1.0) if spring_force > 0.0 else 0.0
