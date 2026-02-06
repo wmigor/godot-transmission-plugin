@@ -1,3 +1,4 @@
+@tool
 extends System
 class_name AntiRollBar
 

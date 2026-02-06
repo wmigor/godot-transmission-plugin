@@ -1,4 +1,5 @@
-extends Node
+@tool
+extends TransmissionComponent
 class_name Motor
 
 @export_range(0.0, 1.0, 0.001) var input_throttle := 0.0

@@ -1,4 +1,5 @@
-extends Node
+@tool
+extends TransmissionComponent
 class_name GearBox
 
 signal gear_changed

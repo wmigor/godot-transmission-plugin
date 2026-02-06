@@ -75,8 +75,9 @@ script = ExtResource("9_umqcv")
 enabled = false
 metadata/_custom_type_script = "uid://ho4ok4d4kwub"
 
-[node name="AirDrag" type="Node" parent="." unique_id=526684335]
+[node name="AirDrag" type="Node" parent="." unique_id=651616631]
 script = ExtResource("7_umqcv")
+metadata/_custom_type_script = "uid://d4akcfjaax1nv"
 
 [node name="PlayerController" type="Node" parent="." unique_id=202538131]
 script = ExtResource("8_d8bn6")

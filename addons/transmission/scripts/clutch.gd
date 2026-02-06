@@ -1,4 +1,5 @@
-extends Node
+@tool
+extends TransmissionComponent
 class_name Clutch
 
 @export_range(0.0, 1.0, 0.001) var input_value := 1.0
@@ -8,7 +9,15 @@ class_name Clutch
 var clutch_locked := false
 
 
-func calculate(delta: float, motor: Motor, differential: Differential, gear: float) -> void:
+func calculate(delta: float) -> void:
+	if transmission == null:
+		return
+	var motor := transmission.motor
+	var gear_box := transmission.gear_box
+	var differential := transmission.differential
+	if motor == null or gear_box == null or differential == null:
+		return
+	var gear := gear_box.gear
 	if input_value <= 0.0 or motor.rpm <= motor.torque_curve.idle_rpm or absf(gear) < 0.01:
 		motor.apply_torque(delta, motor.torque)
 		differential.apply_torque(delta, 0.0)

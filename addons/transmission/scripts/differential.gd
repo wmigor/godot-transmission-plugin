@@ -1,5 +1,6 @@
+@tool
 @abstract
-extends Node
+extends TransmissionComponent
 class_name Differential
 
 
@@ -16,10 +17,10 @@ func get_axle_angular_velocity() -> float
 func get_axle_torque() -> float
 
 @abstract
-func update(delta: float, input_steering: float) -> void
+func before_simulation(delta: float, input_steering: float) -> void
 
 @abstract
-func after_update(delta: float, free: bool, input_brake: float, input_hand_brake: float) -> void
+func after_simulation(delta: float, free: bool, input_brake: float, input_hand_brake: float) -> void
 
 @abstract
 func switch() -> void

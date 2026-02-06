@@ -1,3 +1,4 @@
+@tool
 extends Differential
 class_name DifferentialSim
 
@@ -14,7 +15,6 @@ var _wheels: Array[Wheel]
 
 
 func _ready() -> void:
-	var transmission := get_parent() as Transmission
 	if transmission == null:
 		return
 	_vehicle = transmission.get_parent() as RigidBody3D
@@ -84,7 +84,7 @@ func get_axle_torque() -> float:
 	return axle_torque / len(_traction_wheels)
 
 
-func update(delta: float, input_steering: float) -> void:
+func before_simulation(delta: float, input_steering: float) -> void:
 	if _vehicle == null:
 		return
 	var state := PhysicsServer3D.body_get_direct_state(_vehicle.get_rid())
@@ -97,7 +97,7 @@ func update(delta: float, input_steering: float) -> void:
 		wheel.calculate_force(delta, _vehicle, center_of_mass)
 
 
-func after_update(delta: float, free: bool, input_brake: float, input_hand_brake: float) -> void:
+func after_simulation(delta: float, free: bool, input_brake: float, input_hand_brake: float) -> void:
 	for wheel in _free_wheels:
 		wheel.apply_torque(delta)
 	for wheel in _wheels:

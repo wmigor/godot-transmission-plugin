@@ -1,3 +1,4 @@
+@tool
 extends Node
 class_name Transmission
 
@@ -21,15 +22,33 @@ func _ready() -> void:
 
 
 func _physics_process(delta: float) -> void:
-	if motor == null or gear_box == null or clutch == null or differential == null:
+	if motor == null or gear_box == null or clutch == null or differential == null or Engine.is_editor_hint():
 		return
 	for system in _systems.values():
 		system.update(delta)
-	differential.update(delta, input_steering)
+	differential.before_simulation(delta, input_steering)
 	motor.update_torque()
-	clutch.calculate(delta, motor, differential, gear_box.gear)
-	differential.after_update(delta, clutch.input_value * motor.input_throttle <= 0.0, input_brake, input_hand_brake)
+	clutch.calculate(delta)
+	differential.after_simulation(delta, clutch.input_value * motor.input_throttle <= 0.0, input_brake, input_hand_brake)
 
 
 func get_system(system_name: String) -> System:
 	return _systems.get(system_name)
+
+
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_CHILD_ORDER_CHANGED:
+		update_configuration_warnings()
+
+
+func _get_configuration_warnings() -> PackedStringArray:
+	var warnings := PackedStringArray()
+	if len(find_children("*", "Motor", false)) != 1:
+		warnings.append("One Motor node required")
+	if len(find_children("*", "GearBox", false)) != 1:
+		warnings.append("One GearBox node required")
+	if len(find_children("*", "Clutch", false)) != 1:
+		warnings.append("One Clutch node required")
+	if len(find_children("*", "Differential", false)) != 1:
+		warnings.append("One Differential node required")
+	return warnings

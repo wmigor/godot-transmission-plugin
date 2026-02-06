@@ -1,5 +1,6 @@
+@tool
 @abstract
-extends Node
+extends TransmissionComponent
 class_name System
 
 signal enable_changed(bool)
