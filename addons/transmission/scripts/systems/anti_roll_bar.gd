@@ -1,4 +1,4 @@
-extends Node
+extends System
 class_name AntiRollBar
 
 @export var wheel1_path: NodePath
@@ -9,8 +9,8 @@ class_name AntiRollBar
 @onready var wheel2 := get_node(wheel2_path) as Wheel
 
 
-func update_forces() -> void:
-	if wheel1 == null or wheel2 == null:
+func update(_delta: float) -> void:
+	if wheel1 == null or wheel2 == null or not enabled:
 		return
 	var compress1 := wheel1.suspension.compress - wheel1.spring_length
 	var compress2 := wheel2.suspension.compress - wheel2.spring_length

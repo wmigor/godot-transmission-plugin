@@ -5,7 +5,7 @@ class_name System
 signal enable_changed(bool)
 signal indicator_changed(bool)
 
-var enabled: bool:
+@export var enabled := true:
 	set(value):
 		if enabled != value:
 			enabled = value

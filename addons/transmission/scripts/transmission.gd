@@ -10,13 +10,12 @@ class_name Transmission
 @onready var clutch := $Clutch as Clutch
 @onready var differential := $Differential as Differential
 
-var _anti_roll_bars: Array[AntiRollBar]
-var _systems: Array[System]
+var _systems: Dictionary[String, System]
 
 
 func _ready() -> void:
-	_anti_roll_bars.append_array(find_children("*", "AntiRollBar"))
-	_systems.append_array(find_children("*", "System"))
+	for system in find_children("*", "System"):
+		_systems[system.name] = system
 	set_physics_process(false)
 	set_physics_process.call_deferred(true)
 
@@ -24,19 +23,13 @@ func _ready() -> void:
 func _physics_process(delta: float) -> void:
 	if motor == null or gear_box == null or clutch == null or differential == null:
 		return
-	var gear := gear_box.gear
-	for anti_roll_bar in _anti_roll_bars:
-		anti_roll_bar.update_forces()
+	for system in _systems.values():
+		system.update(delta)
 	differential.update(delta, input_steering)
 	motor.update_torque()
 	clutch.calculate(delta, motor, differential, gear_box.gear)
-	differential.after_update(delta, clutch.input_value * motor.input_throttle <= 0.05, input_brake, input_hand_brake)
-	for system in _systems:
-		system.update(delta)
+	differential.after_update(delta, clutch.input_value * motor.input_throttle <= 0.0, input_brake, input_hand_brake)
 
 
 func get_system(system_name: String) -> System:
-	for system in _systems:
-		if system.name == system_name:
-			return system
-	return null
+	return _systems.get(system_name)
