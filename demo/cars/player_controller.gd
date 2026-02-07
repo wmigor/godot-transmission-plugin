@@ -52,9 +52,13 @@ func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("switch_differential"):
 		transmission.differential.switch()
 	if event.is_action_pressed("toggle_tcs"):
-		var tcs := transmission.get_system("Tcs")
+		var tcs := transmission.get_system("Tcs") as Tcs
 		if tcs != null:
 			tcs.enabled = not tcs.enabled
+	if event.is_action_pressed("toggle_auto_shift_gear"):
+		var asg := transmission.get_system("AutoShiftGear") as AutoShiftGear
+		if asg != null:
+			asg.enabled = not asg.enabled
 	if event is InputEventMouseMotion:
 		_mouse_control = true
 	elif event.is_action("steering_left_key") or event.is_action("steering_right_key"):

@@ -91,6 +91,14 @@ text = "TCS"
 layout_mode = 2
 text = "0"
 
+[node name="AutoShiftGearLabel" type="Label" parent="Grid" unique_id=949380237]
+layout_mode = 2
+text = "AutoShiftGear"
+
+[node name="AutoShiftGear" type="Label" parent="Grid" unique_id=2117928582]
+layout_mode = 2
+text = "0"
+
 [node name="RpmView" type="Control" parent="." unique_id=685590663]
 layout_mode = 3
 anchors_preset = 2

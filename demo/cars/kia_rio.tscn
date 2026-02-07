@@ -11,6 +11,7 @@
 [ext_resource type="Script" uid="uid://ds06hfi0ebjc8" path="res://demo/cars/motor_sound.gd" id="7_0a8ww"]
 [ext_resource type="Script" uid="uid://d4akcfjaax1nv" path="res://addons/transmission/scripts/air_drag.gd" id="7_rnfmb"]
 [ext_resource type="Script" uid="uid://c8rwsbbak0tb7" path="res://demo/cars/player_controller.gd" id="7_xyd2h"]
+[ext_resource type="Script" uid="uid://stfmx5vx085t" path="res://addons/transmission/scripts/auto_shift_gear.gd" id="8_5q1yv"]
 [ext_resource type="Material" uid="uid://dl7heyuc3vee8" path="res://demo/materials/wheel_material.tres" id="11_pxc1e"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_a1o35"]
@@ -49,6 +50,10 @@ metadata/_custom_type_script = "uid://b1km6i66574xg"
 [node name="Differential" type="Node" parent="Transmission" unique_id=1760802173]
 script = ExtResource("6_0a8ww")
 metadata/_custom_type_script = "uid://caxh3yxhb6k6f"
+
+[node name="AutoShiftGear" type="Node" parent="Transmission" unique_id=1805860079]
+script = ExtResource("8_5q1yv")
+metadata/_custom_type_script = "uid://stfmx5vx085t"
 
 [node name="AirDrag" type="Node" parent="." unique_id=526684335]
 script = ExtResource("7_rnfmb")

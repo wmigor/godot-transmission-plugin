@@ -14,7 +14,15 @@ var gear_name: String:
 	get: return "R" if gear < 0.0 else str(gear_index)
 
 var gear: float:
-	get(): return gears[gear_index] * main_gear if len(gears) > 0 else 1.0
+	get(): return (gears[gear_index] * main_gear) if len(gears) > 0 else 1.0
+
+
+var next_gear: float:
+	get(): return (gears[mini(gear_index + 1, len(gears))] * main_gear) if len(gears) > 0 else 1.0
+
+
+var prev_gear: float:
+	get(): return (gears[maxi(gear_index - 1, 0)] * main_gear) if len(gears) > 0 else 1.0
 
 
 func _ready() -> void:

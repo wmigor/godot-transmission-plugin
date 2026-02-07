@@ -12,6 +12,7 @@ class_name Hud
 @onready var mode_label := $Grid/Mode as Label
 @onready var differential_label := $Grid/Differential as Label
 @onready var tcs_label := $Grid/Tcs as Label
+@onready var auto_shift_gear_label := $Grid/AutoShiftGear as Label
 @onready var title := $Title as Label
 @onready var rpm_view := $RpmView
 
@@ -54,9 +55,11 @@ func _on_car_changed() -> void:
 	if car == null:
 		return
 	var tcs := car.transmission.get_system("Tcs") as Tcs
-	if tcs == null:
-		return
-	_connect_system(tcs, tcs_label)
+	if tcs != null:
+		_connect_system(tcs, tcs_label)
+	var asg := car.transmission.get_system("AutoShiftGear") as AutoShiftGear
+	if asg != null:
+		_connect_system(asg, auto_shift_gear_label)
 
 
 func _connect_system(system: System, label: Label) -> void:
