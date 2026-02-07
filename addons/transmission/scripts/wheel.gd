@@ -101,10 +101,11 @@ func _calculate_tire_force(velocity: Vector3, spring_force: float, forward: Vect
 func _get_tire_forces(slip_angle: float, slip_ratio: float, weight: float) -> Vector2:
 	if tire_model_longitudinal == null or tire_model_lateral == null:
 		return Vector2.ZERO
-	var fx := tire_model_longitudinal.get_value(slip_ratio) * weight
-	var fy := tire_model_lateral.get_value(slip_angle) * weight
-	var fx_max := tire_model_longitudinal.peak * weight
-	var fy_max := tire_model_lateral.peak * weight
+	var ground_friction := _get_ground_friction()
+	var fx := tire_model_longitudinal.get_value(slip_ratio) * weight * ground_friction
+	var fy := tire_model_lateral.get_value(slip_angle) * weight* ground_friction
+	var fx_max := tire_model_longitudinal.peak * weight* ground_friction
+	var fy_max := tire_model_lateral.peak * weight* ground_friction
 	var elliptic_value := fx * fx / (fx_max * fx_max) + fy * fy / (fy_max * fy_max)
 	if elliptic_value > 1.0:
 		return Vector2(fx, fy) / sqrt(elliptic_value)
@@ -155,6 +156,15 @@ func _get_collision_compress(spring_direction: Vector3) -> float:
 	var vector := _ray_cast.get_collision_point() - _ray_cast.global_position
 	return maxf(0.0, spring_length + radius + vector.dot(spring_direction))
 
+
+func _get_ground_friction() -> float:
+	if not _ray_cast.is_colliding():
+		return 0.0
+	var ground := _ray_cast.get_collider() as StaticBody3D
+	if ground == null or ground.physics_material_override == null:
+		return 1.0
+	return ground.physics_material_override.friction
+	
 
 static func calculate_slip_angle(forward_velocity: float, right_velocity: float) -> float:
 	if absf(forward_velocity) < 0.0000001 and absf(right_velocity) < 0.0000001:

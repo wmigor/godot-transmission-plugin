@@ -8,12 +8,6 @@
 [ext_resource type="Script" uid="uid://c3eqoy67l6cmi" path="res://demo/levels/ground.gd" id="5_pb38g"]
 [ext_resource type="Material" uid="uid://dl7heyuc3vee8" path="res://demo/materials/wheel_material.tres" id="7_ya3gt"]
 
-[sub_resource type="FastNoiseLite" id="FastNoiseLite_pb38g"]
-
-[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_ya3gt"]
-generate_mipmaps = false
-noise = SubResource("FastNoiseLite_pb38g")
-
 [sub_resource type="BoxShape3D" id="BoxShape3D_ystn6"]
 size = Vector3(1000, 1, 1000)
 
@@ -26,30 +20,36 @@ size = Vector3(100, 1, 300)
 [sub_resource type="BoxShape3D" id="BoxShape3D_pb38g"]
 size = Vector3(2000, 1, 2000)
 
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_ya3gt"]
+friction = 0.8
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_pb38g"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_ya3gt"]
+generate_mipmaps = false
+noise = SubResource("FastNoiseLite_pb38g")
+
 [node name="Level" type="Node3D" unique_id=1522158654]
 script = ExtResource("1_okbl5")
 car_scenes = Array[PackedScene]([ExtResource("4_ya3gt"), ExtResource("2_ya3gt")])
 
 [node name="Hud" parent="." unique_id=1886024653 instance=ExtResource("4_8b0ir")]
 
-[node name="Ground" type="StaticBody3D" parent="." unique_id=868433706]
-script = ExtResource("5_pb38g")
-height_map_texture = SubResource("NoiseTexture2D_ya3gt")
-ground_material = ExtResource("3_pb38g")
+[node name="Road" type="StaticBody3D" parent="." unique_id=1464853535]
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground" unique_id=2111914354]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Road" unique_id=1399861798]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
 shape = SubResource("BoxShape3D_ystn6")
 
-[node name="CSGBox3D" type="CSGBox3D" parent="Ground/CollisionShape3D" unique_id=332403163]
+[node name="CSGBox3D" type="CSGBox3D" parent="Road/CollisionShape3D" unique_id=786448502]
 size = Vector3(1000, 1, 1000)
 material = ExtResource("3_pb38g")
 
-[node name="Border" type="CollisionShape3D" parent="Ground" unique_id=1774512745]
+[node name="Border" type="CollisionShape3D" parent="Road" unique_id=725184591]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 25, 0, 90)
 shape = SubResource("BoxShape3D_2spen")
 
-[node name="CSGBox3D" type="CSGBox3D" parent="Ground/Border" unique_id=1745792011]
+[node name="CSGBox3D" type="CSGBox3D" parent="Road/Border" unique_id=1762208422]
 size = Vector3(20, 0.3, 0.3)
 material = ExtResource("7_ya3gt")
 
@@ -75,6 +75,12 @@ transform = Transform3D(1, 0, 0, 0, 1.0000002, 0, 0, 0, 1.0000002, 0, 0, 0)
 cast_shadow = 0
 size = Vector3(2000, 1, 2000)
 material = ExtResource("3_pb38g")
+
+[node name="Ground" type="StaticBody3D" parent="." unique_id=868433706]
+physics_material_override = SubResource("PhysicsMaterial_ya3gt")
+script = ExtResource("5_pb38g")
+height_map_texture = SubResource("NoiseTexture2D_ya3gt")
+ground_material = ExtResource("3_pb38g")
 
 [node name="Sun" type="DirectionalLight3D" parent="." unique_id=819319598]
 transform = Transform3D(0.830099, -0.4206912, -0.36599824, 0.5566704, 0.66341394, 0.5, 0.03246272, -0.61878985, 0.7848856, 0, 20, 0)
