@@ -90,7 +90,7 @@ func _calculate_tire_force(velocity: Vector3, spring_force: float, forward: Vect
 		skid_factor = clamp(sqrt(sin(slip_angle) ** 2 + slip_ratio ** 2), 0.0, 1.0) if spring_force > 0.0 else 0.0
 	if spring_force <= 0.0:
 		_last_forward_force = 0.0
-		_last_forward_force = 0.0
+		_last_right_force = 0.0
 	var forward_force := _last_forward_force + 0.5 * (f.x - _last_forward_force)
 	var right_force := _last_right_force + 0.5 * (f.y - _last_right_force)
 	_last_forward_force = forward_force
