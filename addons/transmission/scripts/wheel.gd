@@ -31,6 +31,7 @@ var _forward_velocity: float
 var _old_av: float
 var suspension: Suspension
 var stabilizer_force: float
+var deflection: Vector2
 
 
 func _ready() -> void:
@@ -71,31 +72,52 @@ func calculate_force(delta: float, body: RigidBody3D, center_of_mass: Vector3) -
 	var force_spring_to_tire := _calculate_spring_force(delta, spring_direction, body, center_of_mass)
 	var tire_arm := get_contact_point() - center_of_mass
 	var tire_velocity := body.linear_velocity + body.angular_velocity.cross(tire_arm)
-	var tire_force := _calculate_tire_force(tire_velocity, force_spring_to_tire, forward)
+	var tire_force := _calculate_tire_force(tire_velocity, force_spring_to_tire, forward, delta)
 	torque = -tire_force.dot(forward) * radius
 	body.apply_force(tire_force, tire_arm)
 
 
-func _calculate_tire_force(velocity: Vector3, spring_force: float, forward: Vector3) -> Vector3:
-	var right := global_basis.x
+func _calculate_tire_force(velocity: Vector3, spring_force: float, forward: Vector3, delta: float) -> Vector3:
 	_forward_velocity = velocity.dot(forward)
-	var right_velocity := velocity.dot(right)
-	var slip_angle := calculate_slip_angle(_forward_velocity, right_velocity)
-	var slip_ratio := calculate_slip_ratio(_forward_velocity)
-
-	var f := _get_tire_forces(slip_angle, slip_ratio, spring_force) if spring_force > 0.0 else Vector2.ZERO
-	if absf(_forward_velocity + angular_velocity * radius) < TAU * radius:
-		skid_factor = 0.0
-	else:
-		skid_factor = clamp(sqrt(sin(slip_angle) ** 2 + slip_ratio ** 2), 0.0, 1.0) if spring_force > 0.0 else 0.0
 	if spring_force <= 0.0:
-		_last_forward_force = 0.0
-		_last_right_force = 0.0
-	var forward_force := _last_forward_force + 0.5 * (f.x - _last_forward_force)
-	var right_force := _last_right_force + 0.5 * (f.y - _last_right_force)
-	_last_forward_force = forward_force
-	_last_right_force = right_force
-	return forward_force * forward + right_force * right
+		return Vector3.ZERO
+	var right := global_basis.x
+	var right_velocity := velocity.dot(right)
+	var v_relative := Vector2(_forward_velocity - angular_velocity * radius, right_velocity)
+	var v_rolling := absf(angular_velocity * radius)
+	var L := 0.2
+	var stiffness := 500000.0
+	var damping := 1500.0
+	var mu := 1.1
+	var deflection_deriv := v_relative - (v_rolling / (L * 0.5)) * deflection
+	deflection += deflection_deriv * delta
+	var damping_force := deflection_deriv * damping
+	var force_elastic := deflection * stiffness + damping_force
+	var max_force := maxf(mu * spring_force, 0.0)
+	var force_scalar := force_elastic.length()
+	var ff := force_elastic
+	if force_scalar > max_force and force_scalar > 0.0:
+		ff = max_force * force_elastic / force_scalar
+		deflection = ff / stiffness
+	skid_factor = sqrt(ff.x * ff.x + ff.y * ff.y) / max_force
+	skid_factor = (skid_factor - 0.7)
+	return -ff.x * forward - ff.y * right
+	#var slip_angle := calculate_slip_angle(_forward_velocity, right_velocity)
+	#var slip_ratio := calculate_slip_ratio(_forward_velocity)
+#
+	#var f := _get_tire_forces(slip_angle, slip_ratio, spring_force) if spring_force > 0.0 else Vector2.ZERO
+	#if absf(_forward_velocity + angular_velocity * radius) < TAU * radius:
+		#skid_factor = 0.0
+	#else:
+		#skid_factor = clamp(sqrt(sin(slip_angle) ** 2 + slip_ratio ** 2), 0.0, 1.0) if spring_force > 0.0 else 0.0
+	#if spring_force <= 0.0:
+		#_last_forward_force = 0.0
+		#_last_right_force = 0.0
+	#var forward_force := _last_forward_force + 0.5 * (f.x - _last_forward_force)
+	#var right_force := _last_right_force + 0.5 * (f.y - _last_right_force)
+	#_last_forward_force = forward_force
+	#_last_right_force = right_force
+	#return forward_force * forward + right_force * right
 
 
 func _get_tire_forces(slip_angle: float, slip_ratio: float, weight: float) -> Vector2:
