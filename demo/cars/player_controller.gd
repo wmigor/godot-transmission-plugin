@@ -50,7 +50,9 @@ func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("mode"):
 		clutch_mode = not clutch_mode
 	if event.is_action_pressed("switch_differential"):
-		transmission.differential.switch()
+		var wheels := transmission.wheels as WheelsSim
+		if wheels != null:
+			wheels.differential.switch()
 	if event.is_action_pressed("toggle_tcs"):
 		var tcs := transmission.get_system("Tcs") as Tcs
 		if tcs != null:

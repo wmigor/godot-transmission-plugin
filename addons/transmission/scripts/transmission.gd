@@ -9,7 +9,7 @@ class_name Transmission
 @onready var motor := $Motor as Motor
 @onready var gear_box := $GearBox as GearBox
 @onready var clutch := $Clutch as Clutch
-@onready var differential := $Differential as Differential
+@onready var wheels := $Wheels as Wheels
 
 var _systems: Dictionary[String, System]
 
@@ -22,14 +22,14 @@ func _ready() -> void:
 
 
 func _physics_process(delta: float) -> void:
-	if motor == null or gear_box == null or clutch == null or differential == null or Engine.is_editor_hint():
+	if motor == null or gear_box == null or clutch == null or wheels == null or Engine.is_editor_hint():
 		return
 	for system in _systems.values():
 		system.update(delta)
-	differential.before_simulation(delta, input_steering)
+	wheels.before_simulation(delta, input_steering)
 	motor.update_torque()
 	clutch.calculate(delta)
-	differential.after_simulation(delta, clutch.input_value * motor.input_throttle <= 0.0, input_brake, input_hand_brake)
+	wheels.after_simulation(delta, clutch.input_value * motor.input_throttle <= 0.0, input_brake, input_hand_brake)
 
 
 func get_system(system_name: String) -> System:
@@ -49,6 +49,6 @@ func _get_configuration_warnings() -> PackedStringArray:
 		warnings.append("One GearBox node required")
 	if len(find_children("*", "Clutch", false)) != 1:
 		warnings.append("One Clutch node required")
-	if len(find_children("*", "Differential", false)) != 1:
-		warnings.append("One Differential node required")
+	if len(find_children("*", "Wheels", false)) != 1:
+		warnings.append("One Wheels node required")
 	return warnings

@@ -40,8 +40,15 @@ func _process(_delta: float) -> void:
 	timer_label.text = str(snappedf(Time.get_ticks_msec() / 1000.0, 0.1))
 	torque_label.text = str(roundi(car.transmission.motor.torque)) + " (" + str(roundi(car.transmission.motor.torque * car.transmission.gear_box.gear)) + ")"
 	brake_label.text = str(snappedf(car.transmission.input_brake, 0.01))
-	differential_label.text = car.transmission.differential.get_type_name()
+	differential_label.text = _get_differential_name()
 	_update_mode()
+
+
+func _get_differential_name() -> String:
+	var wheels := car.transmission.wheels as WheelsSim
+	if wheels != null && wheels.differential != null:
+		return wheels.differential.get_type_name()
+	return "None"
 
 
 func _update_mode() -> void:
