@@ -2,7 +2,6 @@ extends Node3D
 class_name Wheel
 
 @export_category("Wheel")
-@export var use_as_traction := false
 @export var steer_angle_max := 0.0
 @export var hand_brakable: bool
 @export var radius := 0.316
@@ -21,10 +20,11 @@ class_name Wheel
 
 @onready var _ray_cast := RayCast3D.new()
 
+var shaft := Shaft.new()
 var angular_velocity: float
-var torque: float
 var brake_torque: float
 var skid_factor: float
+var _tire_torque: float
 var _last_forward_force: float
 var _last_right_force: float
 var _forward_velocity: float
@@ -73,8 +73,16 @@ func calculate_force(delta: float, body: RigidBody3D, center_of_mass: Vector3) -
 	var tire_arm := get_contact_point() - center_of_mass
 	var tire_velocity := body.linear_velocity + body.angular_velocity.cross(tire_arm)
 	var tire_force := _calculate_tire_force(tire_velocity, force_spring_to_tire, forward, delta)
-	torque = -tire_force.dot(forward) * radius
+	_tire_torque = -tire_force.dot(forward) * radius
+	shaft.torque = _tire_torque
 	body.apply_force(tire_force, tire_arm)
+	update_shafts()
+
+
+func update_shafts() -> void:
+	shaft.inertia = inertia
+	shaft.brake_torque = brake_torque
+	shaft.angular_velocity = angular_velocity
 
 
 func _calculate_tire_force(velocity: Vector3, spring_force: float, forward: Vector3, delta: float) -> Vector3:
@@ -135,12 +143,13 @@ func _get_tire_forces(slip_angle: float, slip_ratio: float, weight: float) -> Ve
 
 
 func apply_torque(delta: float) -> void:
-	angular_velocity += delta * torque / inertia
+	angular_velocity += delta * (shaft.torque + _tire_torque) / inertia
+	update_shafts()
 
 
 func update_rotation(delta: float, free: bool, brake: float) -> void:
 	brake_torque = -signf(angular_velocity) * brake * max_brake_torque
-	if free and (absf(brake_torque) > 0.0 or not use_as_traction):
+	if free and absf(brake_torque) > 0.0:
 		free = false
 	if free and (_forward_velocity - angular_velocity * radius) * (_forward_velocity - _old_av * radius) < 0.0:
 		angular_velocity = _forward_velocity / radius
@@ -154,6 +163,7 @@ func update_rotation(delta: float, free: bool, brake: float) -> void:
 	if absf(dv) > absf(angular_velocity):
 		dv = -angular_velocity
 	angular_velocity += dv
+	update_shafts()
 
 	for i in get_child_count():
 		var child := get_child(i) as Node3D

@@ -1,0 +1,186 @@
+[gd_scene format=3 uid="uid://bn6vhgfwf1tvv"]
+
+[ext_resource type="Script" uid="uid://qefa3wx6oj50" path="res://demo/cars/car.gd" id="1_rqhd3"]
+[ext_resource type="Script" uid="uid://begmy7l5i6ph2" path="res://addons/transmission/scripts/transmission.gd" id="2_as5wq"]
+[ext_resource type="Script" uid="uid://cheran6n8tw0w" path="res://addons/transmission/scripts/motor.gd" id="3_1inbu"]
+[ext_resource type="Resource" uid="uid://ceegqxxls7641" path="res://demo/cars/kia_rio_motor_torque.tres" id="4_2olpi"]
+[ext_resource type="Script" uid="uid://bf3blkxmxynai" path="res://addons/transmission/scripts/gear_box.gd" id="5_8u185"]
+[ext_resource type="Script" uid="uid://b1km6i66574xg" path="res://addons/transmission/scripts/clutch.gd" id="6_h01by"]
+[ext_resource type="Script" uid="uid://bqet2lbkhqdwx" path="res://addons/transmission/scripts/wheels_sim.gd" id="7_0xynf"]
+[ext_resource type="Script" uid="uid://iippkr7d47xe" path="res://addons/transmission/scripts/differential.gd" id="8_jshm5"]
+[ext_resource type="Script" uid="uid://b5nw71cdlt3oa" path="res://addons/transmission/scripts/systems/anti_roll_bar.gd" id="9_cja0n"]
+[ext_resource type="Script" uid="uid://ho4ok4d4kwub" path="res://addons/transmission/scripts/systems/tcs.gd" id="10_3d668"]
+[ext_resource type="Script" uid="uid://stfmx5vx085t" path="res://addons/transmission/scripts/auto_shift_gear.gd" id="11_y455e"]
+[ext_resource type="Script" uid="uid://d4akcfjaax1nv" path="res://addons/transmission/scripts/air_drag.gd" id="12_qgtc6"]
+[ext_resource type="Script" uid="uid://c8rwsbbak0tb7" path="res://demo/cars/player_controller.gd" id="13_h2h7r"]
+[ext_resource type="AudioStream" uid="uid://h0y02xnqgri3" path="res://demo/sounds/engine.wav" id="14_pg34j"]
+[ext_resource type="Script" uid="uid://ds06hfi0ebjc8" path="res://demo/cars/motor_sound.gd" id="15_4rxj0"]
+[ext_resource type="AudioStream" uid="uid://dycjcik66nyf0" path="res://demo/sounds/skid.wav" id="16_nj5uh"]
+[ext_resource type="Script" uid="uid://bg5b8476cec70" path="res://demo/cars/skid_sound.gd" id="17_fqat8"]
+[ext_resource type="Script" uid="uid://bf82tsplvyp87" path="res://addons/transmission/scripts/wheel.gd" id="18_vu6b4"]
+[ext_resource type="Resource" uid="uid://b1eknvdfri7ct" path="res://demo/cars/kia_tire_model_longitudinal.tres" id="19_of2w4"]
+[ext_resource type="Resource" uid="uid://b04dapay0xfen" path="res://demo/cars/kia_tire_model_lateral.tres" id="20_ln0sd"]
+[ext_resource type="Material" uid="uid://dl7heyuc3vee8" path="res://demo/materials/wheel_material.tres" id="21_jesak"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_a1o35"]
+size = Vector3(1.8, 1, 4.65)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_a1o35"]
+transparency = 1
+albedo_color = Color(1, 0.34901962, 0.34901962, 0.52156866)
+
+[node name="KiaRioSim4x4" type="VehicleBody3D" unique_id=152696280]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0, 0, 0)
+mass = 1300.0
+center_of_mass_mode = 1
+center_of_mass = Vector3(0, -0.26, 0)
+linear_damp_mode = 1
+angular_damp_mode = 1
+script = ExtResource("1_rqhd3")
+title = "Kia Rio 4x4 Real Simulation"
+
+[node name="Transmission" type="Node" parent="." unique_id=578752458]
+script = ExtResource("2_as5wq")
+metadata/_custom_type_script = "uid://begmy7l5i6ph2"
+
+[node name="Motor" type="Node" parent="Transmission" unique_id=15648613]
+script = ExtResource("3_1inbu")
+torque_curve = ExtResource("4_2olpi")
+metadata/_custom_type_script = "uid://cheran6n8tw0w"
+
+[node name="GearBox" type="Node" parent="Transmission" unique_id=1007152266]
+script = ExtResource("5_8u185")
+metadata/_custom_type_script = "uid://bf3blkxmxynai"
+
+[node name="Clutch" type="Node" parent="Transmission" unique_id=482457867]
+script = ExtResource("6_h01by")
+metadata/_custom_type_script = "uid://b1km6i66574xg"
+
+[node name="Wheels" type="Node" parent="Transmission" unique_id=57817799]
+script = ExtResource("7_0xynf")
+metadata/_custom_type_script = "uid://bqet2lbkhqdwx"
+
+[node name="Differential" type="Node" parent="Transmission/Wheels" unique_id=820764634]
+script = ExtResource("8_jshm5")
+left_node = NodePath("DifferentialForont")
+right_node = NodePath("DifferentialRear")
+type = 1
+metadata/_custom_type_script = "uid://iippkr7d47xe"
+
+[node name="DifferentialForont" type="Node" parent="Transmission/Wheels/Differential" unique_id=1679072985]
+script = ExtResource("8_jshm5")
+left_node = NodePath("../../../../WheelFL")
+right_node = NodePath("../../../../WheelFR")
+type = 1
+metadata/_custom_type_script = "uid://iippkr7d47xe"
+
+[node name="DifferentialRear" type="Node" parent="Transmission/Wheels/Differential" unique_id=67146767]
+script = ExtResource("8_jshm5")
+left_node = NodePath("../../../../WheelRL")
+right_node = NodePath("../../../../WheelRR")
+type = 1
+metadata/_custom_type_script = "uid://iippkr7d47xe"
+
+[node name="AntiRollBarF" type="Node" parent="Transmission" unique_id=31323183]
+script = ExtResource("9_cja0n")
+wheel1_path = NodePath("../../WheelFL")
+wheel2_path = NodePath("../../WheelFR")
+metadata/_custom_type_script = "uid://b5nw71cdlt3oa"
+
+[node name="AntiRollBarR" type="Node" parent="Transmission" unique_id=1011373411]
+script = ExtResource("9_cja0n")
+wheel1_path = NodePath("../../WheelRL")
+wheel2_path = NodePath("../../WheelRR")
+metadata/_custom_type_script = "uid://b5nw71cdlt3oa"
+
+[node name="Tcs" type="Node" parent="Transmission" unique_id=1989647506]
+script = ExtResource("10_3d668")
+enabled = false
+metadata/_custom_type_script = "uid://ho4ok4d4kwub"
+
+[node name="AutoShiftGear" type="Node" parent="Transmission" unique_id=2012162877]
+script = ExtResource("11_y455e")
+metadata/_custom_type_script = "uid://stfmx5vx085t"
+
+[node name="AirDrag" type="Node" parent="." unique_id=651616631]
+script = ExtResource("12_qgtc6")
+metadata/_custom_type_script = "uid://d4akcfjaax1nv"
+
+[node name="PlayerController" type="Node" parent="." unique_id=202538131]
+script = ExtResource("13_h2h7r")
+transmission_path = NodePath("../Transmission")
+
+[node name="MotorSound" type="AudioStreamPlayer3D" parent="." unique_id=1596096882]
+stream = ExtResource("14_pg34j")
+script = ExtResource("15_4rxj0")
+_motor_path = NodePath("../Transmission/Motor")
+
+[node name="SkidSound" type="AudioStreamPlayer3D" parent="." unique_id=483830331]
+stream = ExtResource("16_nj5uh")
+script = ExtResource("17_fqat8")
+
+[node name="WheelFR" type="Node3D" parent="." unique_id=1095449092]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.78, -0.6, -1.35)
+script = ExtResource("18_vu6b4")
+steer_angle_max = 42.0
+tire_model_longitudinal = ExtResource("19_of2w4")
+tire_model_lateral = ExtResource("20_ln0sd")
+metadata/_custom_type_script = "uid://bf82tsplvyp87"
+
+[node name="CSGCylinder3D" type="CSGCylinder3D" parent="WheelFR" unique_id=760185263]
+transform = Transform3D(-4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0, 0, 1, 0, 0, 0)
+radius = 0.316
+height = 0.2
+material = ExtResource("21_jesak")
+
+[node name="WheelFL" type="Node3D" parent="." unique_id=792580611]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.78, -0.6, -1.35)
+script = ExtResource("18_vu6b4")
+steer_angle_max = 42.0
+tire_model_longitudinal = ExtResource("19_of2w4")
+tire_model_lateral = ExtResource("20_ln0sd")
+metadata/_custom_type_script = "uid://bf82tsplvyp87"
+
+[node name="CSGCylinder3D" type="CSGCylinder3D" parent="WheelFL" unique_id=1826151490]
+transform = Transform3D(-4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0, 0, 1, 0, 0, 0)
+radius = 0.316
+height = 0.2
+material = ExtResource("21_jesak")
+
+[node name="WheelRR" type="Node3D" parent="." unique_id=953722438]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.78, -0.6, 1.35)
+script = ExtResource("18_vu6b4")
+hand_brakable = true
+tire_model_longitudinal = ExtResource("19_of2w4")
+tire_model_lateral = ExtResource("20_ln0sd")
+metadata/_custom_type_script = "uid://bf82tsplvyp87"
+
+[node name="CSGCylinder3D" type="CSGCylinder3D" parent="WheelRR" unique_id=1445821347]
+transform = Transform3D(-4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0, 0, 1, 0, 0, 0)
+radius = 0.316
+height = 0.2
+material = ExtResource("21_jesak")
+
+[node name="WheelRL" type="Node3D" parent="." unique_id=1258236244]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.78, -0.6, 1.35)
+script = ExtResource("18_vu6b4")
+hand_brakable = true
+tire_model_longitudinal = ExtResource("19_of2w4")
+tire_model_lateral = ExtResource("20_ln0sd")
+metadata/_custom_type_script = "uid://bf82tsplvyp87"
+
+[node name="CSGCylinder3D" type="CSGCylinder3D" parent="WheelRL" unique_id=1484325058]
+transform = Transform3D(-4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0, 0, 1, 0, 0, 0)
+radius = 0.316
+height = 0.2
+material = ExtResource("21_jesak")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=816302710]
+shape = SubResource("BoxShape3D_a1o35")
+
+[node name="CSGBox3D" type="CSGBox3D" parent="CollisionShape3D" unique_id=1523249238]
+size = Vector3(1.8, 1, 4.65)
+material = SubResource("StandardMaterial3D_a1o35")
+
+[node name="Camera3D" type="Camera3D" parent="." unique_id=1276046981]
+transform = Transform3D(1, 0, 0, 0, 0.9612617, 0.27563736, 0, -0.27563736, 0.9612617, 0, 1.372, 5)
