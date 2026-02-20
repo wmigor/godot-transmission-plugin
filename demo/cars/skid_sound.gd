@@ -1,6 +1,6 @@
 extends AudioStreamPlayer3D
 
-@export_range(0.0, 1.0, 0.01) var min_skid_factor := 0.2
+@export_range(0.0, 1.0, 0.01) var min_skid_factor := 0.33
 
 @onready var _body := get_parent() as RigidBody3D
 

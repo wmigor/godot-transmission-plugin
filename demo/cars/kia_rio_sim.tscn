@@ -62,6 +62,8 @@ metadata/_custom_type_script = "uid://bqet2lbkhqdwx"
 
 [node name="Differential" type="Node" parent="Transmission/Wheels" unique_id=820764634]
 script = ExtResource("8_i13qf")
+left_node = NodePath("../../../WheelRL")
+right_node = NodePath("../../../WheelRR")
 metadata/_custom_type_script = "uid://iippkr7d47xe"
 
 [node name="AntiRollBarF" type="Node" parent="Transmission" unique_id=31323183]
@@ -133,7 +135,6 @@ material = ExtResource("11_i13qf")
 [node name="WheelRR" type="Node3D" parent="." unique_id=953722438]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.78, -0.6, 1.35)
 script = ExtResource("12_uxx4a")
-use_as_traction = true
 hand_brakable = true
 tire_model_longitudinal = ExtResource("13_qx2ah")
 tire_model_lateral = ExtResource("14_wlx43")
@@ -148,7 +149,6 @@ material = ExtResource("11_i13qf")
 [node name="WheelRL" type="Node3D" parent="." unique_id=1258236244]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.78, -0.6, 1.35)
 script = ExtResource("12_uxx4a")
-use_as_traction = true
 hand_brakable = true
 tire_model_longitudinal = ExtResource("13_qx2ah")
 tire_model_lateral = ExtResource("14_wlx43")
