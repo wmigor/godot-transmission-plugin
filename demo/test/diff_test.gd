@@ -6,8 +6,9 @@ var time: float
 
 func _physics_process(delta: float) -> void:
 	var old := input_shaft.angular_velocity
-	input_shaft.update_feedback()
-	input_shaft.update(delta)
+	input_shaft.update_velocity(delta)
+	for i in 5:
+		input_shaft.update(delta)
 	time += delta
 	if old < 1 and input_shaft.angular_velocity >= 1:
 		print("shaft time: ", time)

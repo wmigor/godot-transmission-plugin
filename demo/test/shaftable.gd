@@ -7,7 +7,7 @@ class_name Shaftable
 
 
 @abstract
-func update_feedback() -> void
+func update_velocity(delta: float) -> void
 
 @abstract
 func update(delta: float) -> void

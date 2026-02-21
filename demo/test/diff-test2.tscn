@@ -10,7 +10,8 @@ script = ExtResource("1_f4y31")
 [node name="InputShaft" type="Node2D" parent="." unique_id=481379391]
 position = Vector2(585, 64)
 script = ExtResource("2_2av4b")
-inertia = 1111111.0
+inertia = 0.001
+input_torque = 0.5
 metadata/_custom_type_script = "uid://vy1mhs0gi6jy"
 
 [node name="CentralDifferential" type="Node2D" parent="InputShaft" unique_id=1952252172]
@@ -20,7 +21,6 @@ script = ExtResource("3_gem37")
 [node name="LeftShaft" type="Node2D" parent="InputShaft/CentralDifferential" unique_id=903428386]
 position = Vector2(-261, 103)
 script = ExtResource("2_2av4b")
-input_torque = 1.0
 metadata/_custom_type_script = "uid://vy1mhs0gi6jy"
 
 [node name="RightShaft" type="Node2D" parent="InputShaft/CentralDifferential" unique_id=1088071833]

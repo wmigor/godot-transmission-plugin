@@ -21,21 +21,20 @@ class_name ShaftView
 var angular_velocity: float
 var torque: float
 var angle: float
-var total_inertia: float
 
 
-func update_feedback() -> void:
+func update_velocity(delta: float) -> void:
 	torque = input_torque - angular_velocity * friction
-	if output != null:
-		output.update_feedback()
-
-
-func update(delta: float) -> void:
 	angular_velocity += delta * torque / inertia
 	angle += angular_velocity * delta
 	if output != null:
-		output.update(delta)
+		output.update_velocity(delta)
 	queue_redraw()
+
+
+func update(delta: float) -> void:
+	if output != null:
+		output.update(delta)
 
 
 func _draw() -> void:
