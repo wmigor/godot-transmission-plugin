@@ -2,7 +2,7 @@
 extends Node2D
 class_name ShaftView
 
-@export var inertia := 0.0
+@export var inertia := 1.0
 @export var input_torque := 0.0
 @export var friction := 0.0
 
@@ -16,7 +16,7 @@ class_name ShaftView
 		color = value
 		queue_redraw()
 
-@onready var output := get_child(0) as Shaftable
+@onready var output := (get_child(0) as Shaftable) if get_child_count() > 0 else null
 
 var angular_velocity: float
 var torque: float
@@ -25,13 +25,16 @@ var total_inertia: float
 
 
 func update_feedback() -> void:
-	output.update_feedback()
+	torque = input_torque - angular_velocity * friction
+	if output != null:
+		output.update_feedback()
 
 
 func update(delta: float) -> void:
-	angular_velocity += delta * torque / total_inertia
+	angular_velocity += delta * torque / inertia
 	angle += angular_velocity * delta
-	output.update(delta)
+	if output != null:
+		output.update(delta)
 	queue_redraw()
 
 

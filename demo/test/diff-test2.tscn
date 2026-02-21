@@ -3,7 +3,6 @@
 [ext_resource type="Script" uid="uid://c0ese0k0l31kw" path="res://demo/test/diff_test.gd" id="1_f4y31"]
 [ext_resource type="Script" uid="uid://vy1mhs0gi6jy" path="res://demo/test/shaft_view.gd" id="2_2av4b"]
 [ext_resource type="Script" uid="uid://bfei05dk73dw7" path="res://demo/test/differential_view.gd" id="3_gem37"]
-[ext_resource type="Script" uid="uid://d2q7nnoi4t1aw" path="res://demo/test/wheel_view.gd" id="4_avc7i"]
 
 [node name="DiffTest2" type="Node2D" unique_id=504150333]
 script = ExtResource("1_f4y31")
@@ -11,7 +10,7 @@ script = ExtResource("1_f4y31")
 [node name="InputShaft" type="Node2D" parent="." unique_id=481379391]
 position = Vector2(585, 64)
 script = ExtResource("2_2av4b")
-input_torque = 0.5
+inertia = 1111111.0
 metadata/_custom_type_script = "uid://vy1mhs0gi6jy"
 
 [node name="CentralDifferential" type="Node2D" parent="InputShaft" unique_id=1952252172]
@@ -21,22 +20,10 @@ script = ExtResource("3_gem37")
 [node name="LeftShaft" type="Node2D" parent="InputShaft/CentralDifferential" unique_id=903428386]
 position = Vector2(-261, 103)
 script = ExtResource("2_2av4b")
+input_torque = 1.0
 metadata/_custom_type_script = "uid://vy1mhs0gi6jy"
-
-[node name="WheelFL" type="Node2D" parent="InputShaft/CentralDifferential/LeftShaft" unique_id=1188439413]
-position = Vector2(0, 108)
-script = ExtResource("4_avc7i")
-inertia = 99999999.0
-friction = 1000.0
-metadata/_custom_type_script = "uid://d2q7nnoi4t1aw"
 
 [node name="RightShaft" type="Node2D" parent="InputShaft/CentralDifferential" unique_id=1088071833]
 position = Vector2(232, 103)
 script = ExtResource("2_2av4b")
 metadata/_custom_type_script = "uid://vy1mhs0gi6jy"
-
-[node name="WheelFR" type="Node2D" parent="InputShaft/CentralDifferential/RightShaft" unique_id=1697372298]
-position = Vector2(0, 108)
-script = ExtResource("4_avc7i")
-friction = 0.0
-metadata/_custom_type_script = "uid://d2q7nnoi4t1aw"
