@@ -2,57 +2,61 @@
 
 [ext_resource type="Script" uid="uid://c0ese0k0l31kw" path="res://demo/test/diff_test.gd" id="1_e1myq"]
 [ext_resource type="Script" uid="uid://vy1mhs0gi6jy" path="res://demo/test/shaft_view.gd" id="2_ci5g1"]
+[ext_resource type="Script" uid="uid://tkg4eiq17qeb" path="res://demo/test/motor_view.gd" id="2_pyngn"]
 [ext_resource type="Script" uid="uid://bfei05dk73dw7" path="res://demo/test/differential_view.gd" id="3_pyngn"]
 
 [node name="DiffTest" type="Node2D" unique_id=504150333]
 script = ExtResource("1_e1myq")
 
-[node name="InputShaft" type="Node2D" parent="." unique_id=481379391]
-position = Vector2(585, 64)
+[node name="Motor" type="Node2D" parent="." unique_id=1857383112]
+position = Vector2(594, 39)
+script = ExtResource("2_pyngn")
+
+[node name="InputShaft" type="Node2D" parent="Motor" unique_id=481379391]
+position = Vector2(6, 70)
 script = ExtResource("2_ci5g1")
-inertia = 0.001
-input_torque = 0.5
+inertia = 0.1
 metadata/_custom_type_script = "uid://vy1mhs0gi6jy"
 
-[node name="CentralDifferential" type="Node2D" parent="InputShaft" unique_id=1952252172]
+[node name="CentralDifferential" type="Node2D" parent="Motor/InputShaft" unique_id=1952252172]
 position = Vector2(7, 137)
 script = ExtResource("3_pyngn")
 
-[node name="FrontShaft" type="Node2D" parent="InputShaft/CentralDifferential" unique_id=1012499790]
+[node name="FrontShaft" type="Node2D" parent="Motor/InputShaft/CentralDifferential" unique_id=1012499790]
 position = Vector2(207, 5)
 script = ExtResource("2_ci5g1")
 inertia = 0.001
 metadata/_custom_type_script = "uid://vy1mhs0gi6jy"
 
-[node name="FrontDifferential" type="Node2D" parent="InputShaft/CentralDifferential/FrontShaft" unique_id=314450713]
+[node name="FrontDifferential" type="Node2D" parent="Motor/InputShaft/CentralDifferential/FrontShaft" unique_id=314450713]
 position = Vector2(153, 99)
 script = ExtResource("3_pyngn")
 
-[node name="LeftShaft" type="Node2D" parent="InputShaft/CentralDifferential/FrontShaft/FrontDifferential" unique_id=903428386]
+[node name="LeftShaft" type="Node2D" parent="Motor/InputShaft/CentralDifferential/FrontShaft/FrontDifferential" unique_id=903428386]
 position = Vector2(-38, 24)
 script = ExtResource("2_ci5g1")
 metadata/_custom_type_script = "uid://vy1mhs0gi6jy"
 
-[node name="RightShaft" type="Node2D" parent="InputShaft/CentralDifferential/FrontShaft/FrontDifferential" unique_id=1088071833]
+[node name="RightShaft" type="Node2D" parent="Motor/InputShaft/CentralDifferential/FrontShaft/FrontDifferential" unique_id=1088071833]
 position = Vector2(-243, 24)
 script = ExtResource("2_ci5g1")
 metadata/_custom_type_script = "uid://vy1mhs0gi6jy"
 
-[node name="RearShaft" type="Node2D" parent="InputShaft/CentralDifferential" unique_id=448863166]
+[node name="RearShaft" type="Node2D" parent="Motor/InputShaft/CentralDifferential" unique_id=448863166]
 position = Vector2(-344, -14)
 script = ExtResource("2_ci5g1")
 inertia = 0.001
 metadata/_custom_type_script = "uid://vy1mhs0gi6jy"
 
-[node name="RearDifferential" type="Node2D" parent="InputShaft/CentralDifferential/RearShaft" unique_id=524940348]
+[node name="RearDifferential" type="Node2D" parent="Motor/InputShaft/CentralDifferential/RearShaft" unique_id=524940348]
 script = ExtResource("3_pyngn")
 
-[node name="LeftShaft" type="Node2D" parent="InputShaft/CentralDifferential/RearShaft/RearDifferential" unique_id=463542145]
+[node name="LeftShaft" type="Node2D" parent="Motor/InputShaft/CentralDifferential/RearShaft/RearDifferential" unique_id=463542145]
 position = Vector2(123, 132)
 script = ExtResource("2_ci5g1")
 metadata/_custom_type_script = "uid://vy1mhs0gi6jy"
 
-[node name="RightShaft" type="Node2D" parent="InputShaft/CentralDifferential/RearShaft/RearDifferential" unique_id=1073111633]
+[node name="RightShaft" type="Node2D" parent="Motor/InputShaft/CentralDifferential/RearShaft/RearDifferential" unique_id=1073111633]
 position = Vector2(-137, 132)
 script = ExtResource("2_ci5g1")
 metadata/_custom_type_script = "uid://vy1mhs0gi6jy"

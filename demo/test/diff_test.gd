@@ -1,19 +1,19 @@
 extends Node2D
 
-@onready var input_shaft := $InputShaft as ShaftView
+@onready var motor := $Motor as MotorView
 var av: float
 var time: float
 
 func _physics_process(delta: float) -> void:
-	var old := input_shaft.angular_velocity
-	input_shaft.update_velocity(delta)
-	for i in 5:
-		input_shaft.update(delta)
+	var old := motor.angular_velocity
+	motor.update_velocity(delta)
+	for i in 20:
+		motor.update(delta)
 	time += delta
-	if old < 1 and input_shaft.angular_velocity >= 1:
+	if old < 1 and motor.angular_velocity >= 1:
 		print("shaft time: ", time)
 	old = av
-	av += input_shaft.input_torque * delta
+	av += motor.input_torque * delta
 	if old < 1 and av >= 1:
 		print("av time: ", time)
 	
