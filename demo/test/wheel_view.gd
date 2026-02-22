@@ -20,6 +20,7 @@ class_name WheelView
 func update_feedback() -> void:
 	input_shaft.torque = input_torque - input_shaft.angular_velocity * friction
 	input_shaft.total_inertia = input_shaft.inertia + inertia
+	input_shaft.raw_inertia = input_shaft.total_inertia
 
 
 func update(_delta: float) -> void:

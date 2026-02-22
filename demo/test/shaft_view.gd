@@ -22,6 +22,7 @@ var angular_velocity: float
 var torque: float
 var angle: float
 var total_inertia: float
+var raw_inertia: float
 
 
 func update_feedback() -> void:

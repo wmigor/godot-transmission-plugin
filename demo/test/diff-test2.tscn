@@ -26,8 +26,7 @@ metadata/_custom_type_script = "uid://vy1mhs0gi6jy"
 [node name="WheelFL" type="Node2D" parent="InputShaft/CentralDifferential/LeftShaft" unique_id=1188439413]
 position = Vector2(0, 108)
 script = ExtResource("4_avc7i")
-inertia = 99999999.0
-friction = 1000.0
+friction = 10.0
 metadata/_custom_type_script = "uid://d2q7nnoi4t1aw"
 
 [node name="RightShaft" type="Node2D" parent="InputShaft/CentralDifferential" unique_id=1088071833]
