@@ -16,7 +16,7 @@ metadata/_custom_type_script = "uid://tkg4eiq17qeb"
 [node name="InputShaft" type="Node2D" parent="Motor" unique_id=481379391]
 position = Vector2(13, 152)
 script = ExtResource("2_2av4b")
-inertia = 0.1
+inertia = 0.001
 metadata/_custom_type_script = "uid://vy1mhs0gi6jy"
 
 [node name="CentralDifferential" type="Node2D" parent="Motor/InputShaft" unique_id=1952252172]
