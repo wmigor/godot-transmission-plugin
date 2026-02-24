@@ -9,6 +9,7 @@ class_name Wheel
 @export var tire_model_longitudinal: TireModel
 @export var tire_model_lateral: TireModel
 @export var max_brake_torque := 2000.0
+@export var relaxation_length := 0.2
 
 @export_category("Spring")
 @export var spring_stiffness := 20000.0
@@ -28,9 +29,10 @@ var _tire_torque: float
 var _last_forward_force: float
 var _last_right_force: float
 var _forward_velocity: float
-var _old_av: float
+#var _old_av: float
 var suspension: Suspension
 var stabilizer_force: float
+var deflection: Vector2
 
 
 func _ready() -> void:
@@ -71,7 +73,7 @@ func calculate_force(delta: float, body: RigidBody3D, center_of_mass: Vector3) -
 	var force_spring_to_tire := _calculate_spring_force(delta, spring_direction, body, center_of_mass)
 	var tire_arm := get_contact_point() - center_of_mass
 	var tire_velocity := body.linear_velocity + body.angular_velocity.cross(tire_arm)
-	var tire_force := _calculate_tire_force(tire_velocity, force_spring_to_tire, forward)
+	var tire_force := _calculate_tire_force(tire_velocity, force_spring_to_tire, forward, delta)
 	_tire_torque = -tire_force.dot(forward) * radius
 	shaft.torque = _tire_torque
 	body.apply_force(tire_force, tire_arm)
@@ -84,12 +86,16 @@ func update_shafts() -> void:
 	shaft.angular_velocity = angular_velocity
 
 
-func _calculate_tire_force(velocity: Vector3, spring_force: float, forward: Vector3) -> Vector3:
+func _calculate_tire_force(velocity: Vector3, spring_force: float, forward: Vector3, delta: float) -> Vector3:
 	var right := global_basis.x
 	_forward_velocity = velocity.dot(forward)
 	var right_velocity := velocity.dot(right)
-	var slip_angle := calculate_slip_angle(_forward_velocity, right_velocity)
-	var slip_ratio := calculate_slip_ratio(_forward_velocity)
+	#var slip_angle := calculate_slip_angle(_forward_velocity, right_velocity)
+	#var slip_ratio := calculate_slip_ratio(_forward_velocity)
+	
+	_update_deflection(right_velocity, delta)
+	var slip_ratio := -deflection.x / relaxation_length
+	var slip_angle := atan(-deflection.y / relaxation_length)
 
 	var f := _get_tire_forces(slip_angle, slip_ratio, spring_force) if spring_force > 0.0 else Vector2.ZERO
 	if absf(_forward_velocity + angular_velocity * radius) < TAU * radius:
@@ -99,11 +105,19 @@ func _calculate_tire_force(velocity: Vector3, spring_force: float, forward: Vect
 	if spring_force <= 0.0:
 		_last_forward_force = 0.0
 		_last_right_force = 0.0
-	var forward_force := _last_forward_force + 0.5 * (f.x - _last_forward_force)
-	var right_force := _last_right_force + 0.5 * (f.y - _last_right_force)
+	var forward_force := f.x#_last_forward_force + 0.5 * (f.x - _last_forward_force)
+	var right_force := f.y#_last_right_force + 0.5 * (f.y - _last_right_force)
 	_last_forward_force = forward_force
 	_last_right_force = right_force
 	return forward_force * forward + right_force * right
+
+
+func _update_deflection(right_velocity: float, delta: float) -> void:
+	var v_relative := Vector2(_forward_velocity - angular_velocity * radius, right_velocity)
+	var v_rolling := maxf(radius * PI, absf(angular_velocity * radius))
+	var deflection_deriv := v_relative - (v_rolling / (relaxation_length * 0.5)) * deflection
+	deflection += deflection_deriv * delta
+	deflection = deflection.limit_length(relaxation_length)
 
 
 func _get_tire_forces(slip_angle: float, slip_ratio: float, weight: float) -> Vector2:
@@ -125,17 +139,17 @@ func apply_torque(delta: float) -> void:
 	update_shafts()
 
 
-func update_rotation(delta: float, free: bool, brake: float) -> void:
+func update_rotation(delta: float, _free: bool, brake: float) -> void:
 	brake_torque = -signf(angular_velocity) * brake * max_brake_torque
-	if free and absf(brake_torque) > 0.0:
-		free = false
-	if free and (_forward_velocity - angular_velocity * radius) * (_forward_velocity - _old_av * radius) < 0.0:
-		angular_velocity = _forward_velocity / radius
-		_old_av = angular_velocity
-	else:
-		var old_av := angular_velocity
-		angular_velocity = _old_av + (angular_velocity - _old_av) * 0.5
-		_old_av = old_av
+	#if free and absf(brake_torque) > 0.0:
+		#free = false
+	#if free and (_forward_velocity - angular_velocity * radius) * (_forward_velocity - _old_av * radius) < 0.0:
+		#angular_velocity = _forward_velocity / radius
+		#_old_av = angular_velocity
+	#else:
+		#var old_av := angular_velocity
+		#angular_velocity = _old_av + (angular_velocity - _old_av) * 0.5
+		#_old_av = old_av
 
 	var dv := delta * brake_torque / inertia
 	if absf(dv) > absf(angular_velocity):
@@ -176,13 +190,13 @@ func _get_ground_friction() -> float:
 	return ground.physics_material_override.friction
 	
 
-static func calculate_slip_angle(forward_velocity: float, right_velocity: float) -> float:
-	if absf(forward_velocity) < 0.0000001 and absf(right_velocity) < 0.0000001:
-		return 0.0
-	return atan2(-right_velocity, forward_velocity)
+#static func calculate_slip_angle(forward_velocity: float, right_velocity: float) -> float:
+	#if absf(forward_velocity) < 0.0000001 and absf(right_velocity) < 0.0000001:
+		#return 0.0
+	#return atan2(-right_velocity, forward_velocity)
 
 
-func calculate_slip_ratio(forward_velocity: float) -> float:
-	var tire_velocity := angular_velocity * radius
-	var ratio := (tire_velocity - forward_velocity) / maxf(1.0, maxf(absf(forward_velocity), absf(tire_velocity)))
-	return ratio
+#func calculate_slip_ratio(forward_velocity: float) -> float:
+	#var tire_velocity := angular_velocity * radius
+	#var ratio := (tire_velocity - forward_velocity) / maxf(1.0, maxf(absf(forward_velocity), absf(tire_velocity)))
+	#return ratio

@@ -26,6 +26,9 @@ var car: Car:
 		if car != null:
 			player_controller = car.find_child("PlayerController")
 			_on_car_changed()
+		if car != null:
+			for wheel_view in find_children("*", "WheelDeformationView"):
+				wheel_view.wheel = car.get_node(str(wheel_view.name))
 
 
 func _process(_delta: float) -> void:

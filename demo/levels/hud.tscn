@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://cxqca08disbkv" path="res://demo/levels/hud.gd" id="1_43mbw"]
 [ext_resource type="Script" uid="uid://0uih300hbbra" path="res://demo/levels/rpm_view.gd" id="2_i0li5"]
+[ext_resource type="Script" uid="uid://driq5a2g5v3es" path="res://demo/levels/wheel_deformation_view.gd" id="3_i0li5"]
 
 [node name="Hud" type="CanvasLayer" unique_id=1886024653]
 script = ExtResource("1_43mbw")
@@ -135,3 +136,63 @@ grow_horizontal = 2
 text = "title"
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="WheelFL" type="Control" parent="." unique_id=1952145616]
+layout_mode = 3
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -143.0
+offset_top = -250.0
+offset_right = -110.0
+offset_bottom = -177.0
+grow_horizontal = 0
+grow_vertical = 0
+script = ExtResource("3_i0li5")
+
+[node name="WheelFR" type="Control" parent="." unique_id=1358043569]
+layout_mode = 3
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -68.0
+offset_top = -250.0
+offset_right = -35.0
+offset_bottom = -177.0
+grow_horizontal = 0
+grow_vertical = 0
+script = ExtResource("3_i0li5")
+
+[node name="WheelRL" type="Control" parent="." unique_id=1374863767]
+layout_mode = 3
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -143.0
+offset_top = -134.0
+offset_right = -110.0
+offset_bottom = -61.0
+grow_horizontal = 0
+grow_vertical = 0
+script = ExtResource("3_i0li5")
+
+[node name="WheelRR" type="Control" parent="." unique_id=1537233353]
+layout_mode = 3
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -69.0
+offset_top = -134.0
+offset_right = -36.0
+offset_bottom = -61.0
+grow_horizontal = 0
+grow_vertical = 0
+script = ExtResource("3_i0li5")
