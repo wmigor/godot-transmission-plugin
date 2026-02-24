@@ -28,3 +28,7 @@ func get_value(slip: float) -> float:
 	var stiffness_slip := stiffness * slip
 	var value := peak * sin(shape * atan(stiffness_slip - curvature * (stiffness_slip - atan(stiffness_slip))))
 	return value
+
+
+func get_stiffnes_base() -> float:
+	return peak * stiffness * shape

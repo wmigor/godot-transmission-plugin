@@ -10,6 +10,7 @@ class_name Wheel
 @export var tire_model_lateral: TireModel
 @export var max_brake_torque := 2000.0
 @export var relaxation_length := 0.2
+@export var relaxation_time := 0.1
 
 @export_category("Spring")
 @export var spring_stiffness := 20000.0
@@ -93,7 +94,7 @@ func _calculate_tire_force(velocity: Vector3, spring_force: float, forward: Vect
 	#var slip_angle := calculate_slip_angle(_forward_velocity, right_velocity)
 	#var slip_ratio := calculate_slip_ratio(_forward_velocity)
 	
-	_update_deflection(right_velocity, delta)
+	_update_deflection(right_velocity, spring_force, delta)
 	var slip_ratio := -deflection.x / relaxation_length
 	var slip_angle := atan(-deflection.y / relaxation_length)
 
@@ -112,12 +113,20 @@ func _calculate_tire_force(velocity: Vector3, spring_force: float, forward: Vect
 	return forward_force * forward + right_force * right
 
 
-func _update_deflection(right_velocity: float, delta: float) -> void:
+func _update_deflection(right_velocity: float, spring_force: float, delta: float) -> void:
 	var v_relative := Vector2(_forward_velocity - angular_velocity * radius, right_velocity)
-	var v_rolling := maxf(radius * PI, absf(angular_velocity * radius))
-	var deflection_deriv := v_relative - (v_rolling / (relaxation_length * 0.5)) * deflection
+	var v_rolling := absf(angular_velocity * radius)
+	var relaxation := v_rolling / relaxation_length + 1.0 / relaxation_time
+	var deflection_deriv := v_relative - relaxation * deflection
+	var old_deflection := deflection
 	deflection += deflection_deriv * delta
-	deflection = deflection.limit_length(relaxation_length)
+	deflection = old_deflection + 0.5 * (deflection - old_deflection)
+	var max_force := _get_ground_friction() * spring_force * Vector2(tire_model_longitudinal.peak, tire_model_lateral.peak)
+	var stiffness := Vector2(tire_model_longitudinal.get_stiffnes_base(), tire_model_lateral.get_stiffnes_base()) * spring_force
+	var d_max_x := max_force.x / maxf(stiffness.x, 1.0)
+	var d_max_y := max_force.y / maxf(stiffness.y, 1.0)
+	deflection.x = clampf(deflection.x, -d_max_x, d_max_x)
+	deflection.y = clampf(deflection.y, -d_max_y, d_max_y)
 
 
 func _get_tire_forces(slip_angle: float, slip_ratio: float, weight: float) -> Vector2:
@@ -126,8 +135,8 @@ func _get_tire_forces(slip_angle: float, slip_ratio: float, weight: float) -> Ve
 	var ground_friction := _get_ground_friction()
 	var fx := tire_model_longitudinal.get_value(slip_ratio) * weight * ground_friction
 	var fy := tire_model_lateral.get_value(slip_angle) * weight* ground_friction
-	var fx_max := tire_model_longitudinal.peak * weight* ground_friction
-	var fy_max := tire_model_lateral.peak * weight* ground_friction
+	var fx_max := tire_model_longitudinal.peak * weight * ground_friction
+	var fy_max := tire_model_lateral.peak * weight * ground_friction
 	var elliptic_value := fx * fx / (fx_max * fx_max) + fy * fy / (fy_max * fy_max)
 	if elliptic_value > 1.0:
 		return Vector2(fx, fy) / sqrt(elliptic_value)
