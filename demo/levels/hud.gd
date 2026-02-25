@@ -28,7 +28,7 @@ var car: Car:
 			_on_car_changed()
 		if car != null:
 			for wheel_view in find_children("*", "WheelDeformationView"):
-				wheel_view.wheel = car.get_node(str(wheel_view.name))
+				wheel_view.wheel = car.get_node(str(wheel_view.name)) as Wheel
 
 
 func _process(_delta: float) -> void:

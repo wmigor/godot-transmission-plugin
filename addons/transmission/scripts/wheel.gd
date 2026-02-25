@@ -30,10 +30,13 @@ var _tire_torque: float
 var _last_forward_force: float
 var _last_right_force: float
 var _forward_velocity: float
-#var _old_av: float
+var _old_av: float
 var suspension: Suspension
 var stabilizer_force: float
 var deflection: Vector2
+
+var use_relaxation: bool:
+	get(): return relaxation_length > 0.0 and relaxation_time > 0.0
 
 
 func _ready() -> void:
@@ -91,30 +94,37 @@ func _calculate_tire_force(velocity: Vector3, spring_force: float, forward: Vect
 	var right := global_basis.x
 	_forward_velocity = velocity.dot(forward)
 	var right_velocity := velocity.dot(right)
-	#var slip_angle := calculate_slip_angle(_forward_velocity, right_velocity)
-	#var slip_ratio := calculate_slip_ratio(_forward_velocity)
-	
-	_update_deflection(right_velocity, spring_force, delta)
-	var slip_ratio := -deflection.x / relaxation_length
-	var slip_angle := atan(-deflection.y / relaxation_length)
+	var slip_angle: float
+	var slip_ratio: float
+	if use_relaxation:
+		_update_deflection(right_velocity, spring_force, delta)
+		slip_ratio = deflection.x / relaxation_length
+		slip_angle = atan(deflection.y / relaxation_length)
+	else:
+		slip_angle = calculate_slip_angle(_forward_velocity, right_velocity)
+		slip_ratio = calculate_slip_ratio(_forward_velocity)
 
 	var f := _get_tire_forces(slip_angle, slip_ratio, spring_force) if spring_force > 0.0 else Vector2.ZERO
 	if absf(_forward_velocity + angular_velocity * radius) < TAU * radius:
 		skid_factor = 0.0
 	else:
 		skid_factor = clamp(sqrt(sin(slip_angle) ** 2 + slip_ratio ** 2), 0.0, 1.0) if spring_force > 0.0 else 0.0
+
+	if use_relaxation:
+		return f.x * forward + f.y * right
+
 	if spring_force <= 0.0:
 		_last_forward_force = 0.0
 		_last_right_force = 0.0
-	var forward_force := f.x#_last_forward_force + 0.5 * (f.x - _last_forward_force)
-	var right_force := f.y#_last_right_force + 0.5 * (f.y - _last_right_force)
+	var forward_force := _last_forward_force + 0.5 * (f.x - _last_forward_force)
+	var right_force := _last_right_force + 0.5 * (f.y - _last_right_force)
 	_last_forward_force = forward_force
 	_last_right_force = right_force
 	return forward_force * forward + right_force * right
 
 
 func _update_deflection(right_velocity: float, spring_force: float, delta: float) -> void:
-	var v_relative := Vector2(_forward_velocity - angular_velocity * radius, right_velocity)
+	var v_relative := Vector2(angular_velocity * radius - _forward_velocity, -right_velocity)
 	var v_rolling := absf(angular_velocity * radius)
 	var relaxation := v_rolling / relaxation_length + 1.0 / relaxation_time
 	var deflection_deriv := v_relative - relaxation * deflection
@@ -148,17 +158,18 @@ func apply_torque(delta: float) -> void:
 	update_shafts()
 
 
-func update_rotation(delta: float, _free: bool, brake: float) -> void:
+func update_rotation(delta: float, free: bool, brake: float) -> void:
 	brake_torque = -signf(angular_velocity) * brake * max_brake_torque
-	#if free and absf(brake_torque) > 0.0:
-		#free = false
-	#if free and (_forward_velocity - angular_velocity * radius) * (_forward_velocity - _old_av * radius) < 0.0:
-		#angular_velocity = _forward_velocity / radius
-		#_old_av = angular_velocity
-	#else:
-		#var old_av := angular_velocity
-		#angular_velocity = _old_av + (angular_velocity - _old_av) * 0.5
-		#_old_av = old_av
+	if not use_relaxation:
+		if free and absf(brake_torque) > 0.0:
+			free = false
+		if free and (_forward_velocity - angular_velocity * radius) * (_forward_velocity - _old_av * radius) < 0.0:
+			angular_velocity = _forward_velocity / radius
+			_old_av = angular_velocity
+		else:
+			var old_av := angular_velocity
+			angular_velocity = _old_av + (angular_velocity - _old_av) * 0.5
+			_old_av = old_av
 
 	var dv := delta * brake_torque / inertia
 	if absf(dv) > absf(angular_velocity):
@@ -199,13 +210,13 @@ func _get_ground_friction() -> float:
 	return ground.physics_material_override.friction
 	
 
-#static func calculate_slip_angle(forward_velocity: float, right_velocity: float) -> float:
-	#if absf(forward_velocity) < 0.0000001 and absf(right_velocity) < 0.0000001:
-		#return 0.0
-	#return atan2(-right_velocity, forward_velocity)
+static func calculate_slip_angle(forward_velocity: float, right_velocity: float) -> float:
+	if absf(forward_velocity) < 0.0000001 and absf(right_velocity) < 0.0000001:
+		return 0.0
+	return atan2(-right_velocity, forward_velocity)
 
 
-#func calculate_slip_ratio(forward_velocity: float) -> float:
-	#var tire_velocity := angular_velocity * radius
-	#var ratio := (tire_velocity - forward_velocity) / maxf(1.0, maxf(absf(forward_velocity), absf(tire_velocity)))
-	#return ratio
+func calculate_slip_ratio(forward_velocity: float) -> float:
+	var tire_velocity := angular_velocity * radius
+	var ratio := (tire_velocity - forward_velocity) / maxf(1.0, maxf(absf(forward_velocity), absf(tire_velocity)))
+	return ratio

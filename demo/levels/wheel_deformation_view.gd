@@ -8,14 +8,14 @@ var wheel: Wheel:
 
 
 func _process(_delta: float) -> void:
-	if wheel != null:
+	if wheel != null or not wheel.use_relaxation:
 		queue_redraw()
 
 
 func _draw() -> void:
-	if wheel == null:
+	if wheel == null or not wheel.use_relaxation:
 		return
-	
+
 	var rect := get_rect()
 	rect.position = Vector2.ZERO
 	draw_rect(rect, Color.BLACK, false)
