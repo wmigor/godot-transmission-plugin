@@ -10,7 +10,7 @@ class_name Wheel
 @export var tire_model_lateral: TireModel
 @export var max_brake_torque := 2000.0
 @export var relaxation_length := 0.2
-@export var relaxation_damping := 1.0
+@export_range(0.0, 1.0, 0.001) var relaxation_damping := 1.0
 
 @export_category("Spring")
 @export var spring_stiffness := 20000.0
