@@ -185,6 +185,8 @@ func update_rotation(delta: float, free: bool, brake: float) -> void:
 	for i in get_child_count():
 		var child := get_child(i) as Node3D
 		if child != null:
+			child.position.x = deflection.y
+			child.position.z = -deflection.x
 			child.rotate_x(-angular_velocity * delta)
 
 
