@@ -137,4 +137,5 @@ toggle_auto_shift_gear={
 
 [physics]
 
-common/physics_ticks_per_second=300
+common/physics_ticks_per_second=400
+common/max_physics_steps_per_frame=40

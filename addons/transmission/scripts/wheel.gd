@@ -34,6 +34,8 @@ var _old_av: float
 var suspension: Suspension
 var stabilizer_force: float
 var deflection: Vector2
+var deflection_limit: Vector2
+
 
 var use_relaxation: bool:
 	get(): return relaxation_length > 0.0
@@ -101,8 +103,8 @@ func _calculate_tire_force(velocity: Vector3, spring_force: float, forward: Vect
 		var old_deflection := deflection
 		_update_deflection(right_velocity, spring_force, delta)
 		damping = maxf(0.0, spring_force) * relaxation_damping * (old_deflection - deflection) / delta
-		slip_ratio = deflection.x / relaxation_length
-		slip_angle = atan(deflection.y / relaxation_length)
+		slip_ratio = (deflection.x / deflection_limit.x) if deflection_limit.x > 0.0 else 0.0
+		slip_angle = atan(deflection.y / deflection_limit.y) if deflection_limit.y > 0.0 else 0.0
 	else:
 		slip_angle = calculate_slip_angle(_forward_velocity, right_velocity)
 		slip_ratio = calculate_slip_ratio(_forward_velocity)
@@ -136,10 +138,10 @@ func _update_deflection(right_velocity: float, spring_force: float, delta: float
 	deflection = old_deflection + 0.5 * (deflection - old_deflection)
 	var max_force := _get_ground_friction() * spring_force * Vector2(tire_model_longitudinal.peak, tire_model_lateral.peak)
 	var stiffness := Vector2(tire_model_longitudinal.get_stiffnes_base(), tire_model_lateral.get_stiffnes_base()) * spring_force
-	var d_max_x := max_force.x / maxf(stiffness.x, 1.0)
-	var d_max_y := max_force.y / maxf(stiffness.y, 1.0)
-	deflection.x = clampf(deflection.x, -d_max_x, d_max_x)
-	deflection.y = clampf(deflection.y, -d_max_y, d_max_y)
+	deflection_limit.x = maxf(0.0, max_force.x / maxf(stiffness.x, 1.0))
+	deflection_limit.y = maxf(0.0, max_force.y / maxf(stiffness.y, 1.0))
+	deflection.x = clampf(deflection.x, -deflection_limit.x, deflection_limit.x)
+	deflection.y = clampf(deflection.y, -deflection_limit.y, deflection_limit.y)
 
 
 func _get_tire_forces(slip_angle: float, slip_ratio: float, weight: float) -> Vector2:

@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://cxqca08disbkv" path="res://demo/levels/hud.gd" id="1_43mbw"]
 [ext_resource type="Script" uid="uid://0uih300hbbra" path="res://demo/levels/rpm_view.gd" id="2_i0li5"]
-[ext_resource type="Script" uid="uid://driq5a2g5v3es" path="res://demo/levels/wheel_deformation_view.gd" id="3_i0li5"]
+[ext_resource type="Script" path="res://demo/levels/wheel_deformation_view.gd" id="3_i0li5"]
 
 [node name="Hud" type="CanvasLayer" unique_id=1886024653]
 script = ExtResource("1_43mbw")
