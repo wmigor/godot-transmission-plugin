@@ -8,7 +8,7 @@ var wheel: Wheel:
 
 
 func _process(_delta: float) -> void:
-	if wheel != null or not wheel.use_relaxation:
+	if wheel != null and wheel.use_relaxation:
 		queue_redraw()
 
 
