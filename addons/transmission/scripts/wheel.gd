@@ -10,7 +10,7 @@ class_name Wheel
 @export var tire_model_lateral: TireModel
 @export var max_brake_torque := 2000.0
 @export var relaxation_length := 0.2
-@export var relaxation_time := 0.1
+@export var relaxation_damping := 1.0
 
 @export_category("Spring")
 @export var spring_stiffness := 20000.0
@@ -36,7 +36,7 @@ var stabilizer_force: float
 var deflection: Vector2
 
 var use_relaxation: bool:
-	get(): return relaxation_length > 0.0 and relaxation_time > 0.0
+	get(): return relaxation_length > 0.0
 
 
 func _ready() -> void:
@@ -96,8 +96,11 @@ func _calculate_tire_force(velocity: Vector3, spring_force: float, forward: Vect
 	var right_velocity := velocity.dot(right)
 	var slip_angle: float
 	var slip_ratio: float
+	var damping: Vector2
 	if use_relaxation:
+		var old_deflection := deflection
 		_update_deflection(right_velocity, spring_force, delta)
+		damping = maxf(0.0, spring_force) * relaxation_damping * (old_deflection - deflection) / delta
 		slip_ratio = deflection.x / relaxation_length
 		slip_angle = atan(deflection.y / relaxation_length)
 	else:
@@ -111,7 +114,7 @@ func _calculate_tire_force(velocity: Vector3, spring_force: float, forward: Vect
 		skid_factor = clamp(sqrt(sin(slip_angle) ** 2 + slip_ratio ** 2), 0.0, 1.0) if spring_force > 0.0 else 0.0
 
 	if use_relaxation:
-		return f.x * forward + f.y * right
+		return (f.x - damping.x) * forward + (f.y - damping.y) * right
 
 	if spring_force <= 0.0:
 		_last_forward_force = 0.0
@@ -126,7 +129,7 @@ func _calculate_tire_force(velocity: Vector3, spring_force: float, forward: Vect
 func _update_deflection(right_velocity: float, spring_force: float, delta: float) -> void:
 	var v_relative := Vector2(angular_velocity * radius - _forward_velocity, -right_velocity)
 	var v_rolling := absf(angular_velocity * radius)
-	var relaxation := v_rolling / relaxation_length + 1.0 / relaxation_time
+	var relaxation := v_rolling / relaxation_length
 	var deflection_deriv := v_relative - relaxation * deflection
 	var old_deflection := deflection
 	deflection += deflection_deriv * delta
