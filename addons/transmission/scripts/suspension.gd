@@ -11,6 +11,7 @@ var _length: float
 var _mass: float
 var _spring_velocity: float
 var _simple: bool
+var _force: float
 
 
 func _init(stiffness: float, damping_compress: float, damping_relax: float, length: float, mass: float, simple: bool) -> void:
@@ -34,8 +35,10 @@ func _calculate_simple(delta: float, collision_compress: float, stabilizer_force
 		_spring_velocity = clampf((collision_compress - compress) / delta, -10.0, 10.0)
 		compress = collision_compress
 		var damping := _damping_compress if _spring_velocity > 0.0 else _damping_relax
-		var force := -stabilizer_force - compress * _stiffness - _spring_velocity * damping
-		return maxf(0.0, -force)
+		var critical_damping := damping * 2.0 * sqrt(_stiffness * _force / 9.8)
+		_force = -stabilizer_force - compress * _stiffness - _spring_velocity * critical_damping
+		_force = maxf(0.0, -_force)
+		return _force
 	compress = lerpf(compress, 0, delta)
 	_spring_velocity = 0.0
 	return 0.0

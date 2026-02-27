@@ -12,8 +12,8 @@ class_name Wheel
 
 @export_category("Spring")
 @export var spring_stiffness := 20000.0
-@export var spring_damping_compress := 4000.0
-@export var spring_damping_relax := 4000.0
+@export var spring_damping_compress := 0.5
+@export var spring_damping_relax := 0.5
 @export var spring_length := 0.5
 @export var spring_simple := true
 @export var spring_mass := 50.0
