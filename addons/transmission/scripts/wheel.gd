@@ -138,11 +138,8 @@ func _update_deflection(right_velocity: float, spring_force: float, delta: float
 	var stiffness := Vector2(tire_model_longitudinal.get_stiffnes_base(), tire_model_lateral.get_stiffnes_base()) * spring_force
 	deflection_limit.x = maxf(0.0, max_force.x / maxf(stiffness.x, 1.0))
 	deflection_limit.y = maxf(0.0, max_force.y / maxf(stiffness.y, 1.0))
-	var d_norm := deflection
-	d_norm.x /= deflection_limit.x if deflection_limit.x > 0.0 else 1.0
-	d_norm.y /= deflection_limit.y if deflection_limit.y > 0.0 else 1.0
-	if d_norm.length_squared() > 1.0:
-		deflection = d_norm / d_norm.length() * deflection_limit
+	deflection.x = clampf(deflection.x, -deflection_limit.x, deflection_limit.x)
+	deflection.y = clampf(deflection.y, -deflection_limit.y, deflection_limit.y)
 
 
 func _get_tire_forces(slip_angle: float, slip_ratio: float, weight: float) -> Vector2:
