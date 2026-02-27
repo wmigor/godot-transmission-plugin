@@ -12,8 +12,8 @@ class_name Wheel
 
 @export_category("Spring")
 @export var spring_stiffness := 20000.0
-@export var spring_damping_compress := 4000.0
-@export var spring_damping_relax := 4000.0
+@export var spring_damping_compress := 0.5
+@export var spring_damping_relax := 0.5
 @export var spring_length := 0.5
 @export var spring_simple := true
 @export var spring_mass := 50.0
@@ -34,18 +34,19 @@ var stabilizer_force: float
 
 
 func _ready() -> void:
-	suspension = Suspension.new(spring_stiffness, spring_damping_compress, spring_damping_relax, spring_length, spring_mass, spring_simple)
 	var body := _get_parent_body()
+	var wheel_count := len(body.find_children("*", "Wheel"))
+	suspension = Suspension.new(spring_stiffness, spring_damping_compress, spring_damping_relax, spring_length, spring_mass, body.mass / wheel_count, spring_simple)
 	_ray_cast.add_exception(body)
 	_ray_cast.position = body.to_local(global_position) + Vector3.UP * spring_length
 	_ray_cast.target_position = Vector3.DOWN * (radius + spring_length)
 	body.add_child.call_deferred(_ray_cast)
 
 
-func _get_parent_body() -> PhysicsBody3D:
+func _get_parent_body() -> RigidBody3D:
 	var parent = get_parent()
 	while parent != null:
-		if parent is PhysicsBody3D:
+		if parent is RigidBody3D:
 			return parent
 		parent = parent.get_parent()
 	return null
