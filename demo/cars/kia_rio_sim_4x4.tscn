@@ -119,7 +119,7 @@ _motor_path = NodePath("../Transmission/Motor")
 stream = ExtResource("16_nj5uh")
 script = ExtResource("17_fqat8")
 
-[node name="WheelFR" type="Node3D" parent="." unique_id=1095449092]
+[node name="WheelFR" type="RayCast3D" parent="." unique_id=1068873589]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.78, -0.6, -1.35)
 script = ExtResource("18_vu6b4")
 steer_angle_max = 42.0
@@ -133,7 +133,7 @@ radius = 0.316
 height = 0.2
 material = ExtResource("21_jesak")
 
-[node name="WheelFL" type="Node3D" parent="." unique_id=792580611]
+[node name="WheelFL" type="RayCast3D" parent="." unique_id=2089977200]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.78, -0.6, -1.35)
 script = ExtResource("18_vu6b4")
 steer_angle_max = 42.0
@@ -147,7 +147,7 @@ radius = 0.316
 height = 0.2
 material = ExtResource("21_jesak")
 
-[node name="WheelRR" type="Node3D" parent="." unique_id=953722438]
+[node name="WheelRR" type="RayCast3D" parent="." unique_id=1220500282]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.78, -0.6, 1.35)
 script = ExtResource("18_vu6b4")
 hand_brakable = true
@@ -161,7 +161,7 @@ radius = 0.316
 height = 0.2
 material = ExtResource("21_jesak")
 
-[node name="WheelRL" type="Node3D" parent="." unique_id=1258236244]
+[node name="WheelRL" type="RayCast3D" parent="." unique_id=1468461680]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.78, -0.6, 1.35)
 script = ExtResource("18_vu6b4")
 hand_brakable = true

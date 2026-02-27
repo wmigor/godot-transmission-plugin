@@ -17,8 +17,6 @@ var _systems: Dictionary[String, System]
 func _ready() -> void:
 	for system in find_children("*", "System"):
 		_systems[system.name] = system
-	set_physics_process(false)
-	set_physics_process.call_deferred(true)
 
 
 func _physics_process(delta: float) -> void:

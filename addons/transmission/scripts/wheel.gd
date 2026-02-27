@@ -1,4 +1,4 @@
-extends Node3D
+extends RayCast3D
 class_name Wheel
 
 @export_category("Wheel")
@@ -18,8 +18,6 @@ class_name Wheel
 @export var spring_simple := true
 @export var spring_mass := 50.0
 
-@onready var _ray_cast := RayCast3D.new()
-
 var shaft := Shaft.new()
 var angular_velocity: float
 var brake_torque: float
@@ -37,10 +35,9 @@ func _ready() -> void:
 	var body := _get_parent_body()
 	var wheel_count := len(body.find_children("*", "Wheel"))
 	suspension = Suspension.new(spring_stiffness, spring_damping_compress, spring_damping_relax, spring_length, spring_mass, body.mass / wheel_count, spring_simple)
-	_ray_cast.add_exception(body)
-	_ray_cast.position = body.to_local(global_position) + Vector3.UP * spring_length
-	_ray_cast.target_position = Vector3.DOWN * (radius + spring_length)
-	body.add_child.call_deferred(_ray_cast)
+	add_exception(body)
+	target_position = Vector3.DOWN * (radius + spring_length)
+	position += Vector3.UP * spring_length
 
 
 func _get_parent_body() -> RigidBody3D:
@@ -53,20 +50,20 @@ func _get_parent_body() -> RigidBody3D:
 
 
 func _get_spring_direction() -> Vector3:
-	var vector := _ray_cast.global_position - _ray_cast.to_global(_ray_cast.target_position)
+	var vector := global_position - to_global(target_position)
 	vector = vector.normalized()
 	return vector
 
 
 func get_contact_point() -> Vector3:
-	if _ray_cast.is_colliding():
-		return _ray_cast.get_collision_point()
-	return _ray_cast.global_position + _get_spring_direction() * radius
+	if is_colliding():
+		return get_collision_point()
+	return to_global(target_position) + _get_spring_direction() * radius
 
 
 func calculate_force(delta: float, body: RigidBody3D, center_of_mass: Vector3) -> void:
 	var spring_direction := _get_spring_direction()
-	var normal := _ray_cast.get_collision_normal() if _ray_cast.is_colliding() else spring_direction
+	var normal := get_collision_normal() if is_colliding() else spring_direction
 	var right := global_basis.x
 	var forward := normal.cross(right)
 	var force_spring_to_tire := _calculate_spring_force(delta, spring_direction, body, center_of_mass)
@@ -147,31 +144,32 @@ func update_rotation(delta: float, free: bool, brake: float) -> void:
 	for i in get_child_count():
 		var child := get_child(i) as Node3D
 		if child != null:
+			var direction := target_position.normalized()
+			child.position = (target_position - radius * direction).lerp(Vector3.ZERO, suspension.compress / spring_length)
 			child.rotate_x(-angular_velocity * delta)
 
 
 func _calculate_spring_force(delta: float, spring_direction: Vector3, body: RigidBody3D, center_of_mass: Vector3) -> float:
 	var collision_compress := _get_collision_compress(spring_direction)
 	var force := suspension.calculate_force(delta, collision_compress, stabilizer_force)
-	var spring_arm := _ray_cast.global_position - center_of_mass
+	var spring_arm := global_position - center_of_mass
 	body.apply_force(force * spring_direction, spring_arm)
-	global_position = _ray_cast.global_position - spring_direction * (spring_length - suspension.compress)
 	if not suspension.contact:
 		return 0.0
 	return maxf(0.0, force)
 
 
 func _get_collision_compress(spring_direction: Vector3) -> float:
-	if not _ray_cast.is_colliding():
+	if not is_colliding():
 		return 0.0
-	var vector := _ray_cast.get_collision_point() - _ray_cast.global_position
+	var vector := get_collision_point() - global_position
 	return maxf(0.0, spring_length + radius + vector.dot(spring_direction))
 
 
 func _get_ground_friction() -> float:
-	if not _ray_cast.is_colliding():
+	if not is_colliding():
 		return 0.0
-	var ground := _ray_cast.get_collider() as StaticBody3D
+	var ground := get_collider() as StaticBody3D
 	if ground == null or ground.physics_material_override == null:
 		return 1.0
 	return ground.physics_material_override.friction
