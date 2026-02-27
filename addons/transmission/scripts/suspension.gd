@@ -33,7 +33,7 @@ func calculate_force(delta: float, collision_compress: float, stabilizer_force: 
 func _calculate_simple(delta: float, collision_compress: float, stabilizer_force: float) -> float:
 	contact = collision_compress > 0.0
 	if contact:
-		_spring_velocity = clampf((collision_compress - compress) / delta, -10.0, 10.0)
+		_spring_velocity = (collision_compress - compress) / delta
 		compress = collision_compress
 		var damping := _damping_compress if _spring_velocity > 0.0 else _damping_relax
 		var critical_damping := damping * 2.0 * sqrt(_stiffness * _body_mass)
@@ -47,7 +47,7 @@ func _calculate_simple(delta: float, collision_compress: float, stabilizer_force
 func _calculate_force(delta: float, collision_compress: float, stabilizer_force: float) -> float:
 	contact = collision_compress >= compress
 	if contact:
-		_spring_velocity = clampf((collision_compress - compress) / delta, -10.0, 10.0)
+		_spring_velocity = (collision_compress - compress) / delta
 		compress = collision_compress
 	var damping := _damping_compress if _spring_velocity > 0.0 else _damping_relax
 	var critical_damping := damping * 2.0 * sqrt(_stiffness * _body_mass)
@@ -55,4 +55,4 @@ func _calculate_force(delta: float, collision_compress: float, stabilizer_force:
 	_spring_velocity += force * delta / _mass
 	compress += _spring_velocity * delta
 	contact = collision_compress >= compress
-	return -force
+	return maxf(0.0, -force)
