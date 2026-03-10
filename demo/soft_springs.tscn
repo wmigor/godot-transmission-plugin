@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://bky53r1whr3r5"]
+
+[ext_resource type="Script" uid="uid://botou7l7vojdt" path="res://demo/soft_springs.gd" id="1_nvo2k"]
+
+[node name="SoftSprings" type="Node2D" unique_id=218192245]
+script = ExtResource("1_nvo2k")
