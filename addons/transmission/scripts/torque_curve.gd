@@ -112,12 +112,70 @@ var max_rpm_torque := 132.0:
 		emit_changed()
 
 
+@export_group("V2")
+@export var v2 := false:
+	set(value):
+		v2 = value
+		emit_changed()
+
+@export var displacement_in3 := 97.1:
+	set(value):
+		displacement_in3 = value
+		emit_changed()
+
+@export var ve_peak := 0.88:
+	set(value):
+		ve_peak = value
+		emit_changed()
+
+@export var ve_base := 0.76:
+	set(value):
+		ve_base = value
+		emit_changed()
+
+@export var ve_peak_rpm := 4850.0:
+	set(value):
+		ve_peak_rpm = value
+		emit_changed()
+
+@export var choke_rpm := 7500.0:
+	set(value):
+		choke_rpm = value
+		emit_changed()
+
+@export var fmep_static := 16000.0:
+	set(value):
+		fmep_static = value
+		emit_changed()
+
+@export var fmep_dynamic := 28000.0:
+	set(value):
+		fmep_dynamic = value
+		emit_changed()
+
+@export var friction_exp := 1.45:
+	set(value):
+		friction_exp = value
+		emit_changed()
+
+@export var thermal_eff := 0.3:
+	set(value):
+		thermal_eff = value
+		emit_changed()
+
+@export var afr := 12.6:
+	set(value):
+		afr = value
+		emit_changed()
+
 const TO_RPM := 60.0 / TAU
 const HP_TO_W := 745.7
 
 
 func get_torque(angular_velocity: float) -> float:
 	var rpm := angular_velocity * TO_RPM
+	if v2:
+		return calculate_torque(rpm)
 	if rpm <= idle_rpm:
 		return idle_torque
 	if rpm <= effective_rpm:
@@ -140,3 +198,25 @@ func get_torque(angular_velocity: float) -> float:
 
 func get_power(angular_velocity: float) -> float:
 	return angular_velocity * get_torque(angular_velocity)
+
+
+func get_ve(rpm: float) -> float:
+	var ve_curve := (ve_peak - ve_base) * exp(-((rpm - ve_peak_rpm) ** 2) / (2 * (max_rpm * 0.3) ** 2))
+	var choke := 1.0 / (1.0 + exp((rpm - choke_rpm) / (max_rpm * 0.05)))
+	return (ve_base + ve_curve) * choke
+
+
+func calculate_torque(rpm: float, throttle := 1.0, alt_press := 101325.0) -> float:
+	if rpm < idle_rpm:
+		return 0.0
+	var map_pa := (6.0 * 3386.0) + (throttle * (alt_press * 0.98 - 6.0 * 3386.0))
+	var air_density := map_pa / (287.05 * 288.15)
+	var disp_m3 := displacement_in3 * 1.6387e-5
+	var m_dot_air := (disp_m3 * (rpm / 60.0) * air_density * get_ve(rpm)) / 2.0
+	var hp_ind := (m_dot_air / afr * 47.3e6 * thermal_eff) / HP_TO_W
+	var speed_ratio := rpm / max_rpm
+	var fmep := fmep_static + fmep_dynamic * (speed_ratio ** friction_exp)
+	var hp_fric := (fmep * disp_m3 * (rpm / 60.0) / 2.0) / HP_TO_W
+	var hp_shaft := maxf(0, hp_ind - hp_fric)
+	var torque := (hp_shaft * HP_TO_W) / (rpm * TAU / 60.0) if rpm > 0.0 else 0.0
+	return torque
