@@ -168,12 +168,20 @@ var max_rpm_torque := 132.0:
 		afr = value
 		emit_changed()
 
+@export_group("V3")
+@export var v3: bool:
+	set(value):
+		v3 = value
+		emit_changed()
+
 const TO_RPM := 60.0 / TAU
 const HP_TO_W := 745.7
 
 
 func get_torque(angular_velocity: float) -> float:
 	var rpm := angular_velocity * TO_RPM
+	if v3:
+		return get_torque_v3(rpm)
 	if v2:
 		return calculate_torque(rpm)
 	if rpm <= idle_rpm:
@@ -220,3 +228,18 @@ func calculate_torque(rpm: float, throttle := 1.0, alt_press := 101325.0) -> flo
 	var hp_shaft := maxf(0, hp_ind - hp_fric)
 	var torque := (hp_shaft * HP_TO_W) / (rpm * TAU / 60.0) if rpm > 0.0 else 0.0
 	return torque
+
+
+func get_torque_v3(rpm: float, throttle := 1.0) -> float:
+	var n := rpm / max_power_rpm
+	var t := max_torque_rpm / max_power_rpm
+	var b := 0.0
+	var d := t / (3.0 * t * t - 3.0 * t)
+	var c := (-1.0 - 3 * d) / 2.0
+	var a := 1.0 - c - d
+	var factor := a * n + b * n * n + c * n * n * n + d * n * n * n * n
+	var power := max_power * HP_TO_W * factor
+	var av := rpm / TO_RPM
+	var torque := power / maxf(1.0, av)
+	return torque * throttle
+	
