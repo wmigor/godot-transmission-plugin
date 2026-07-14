@@ -1,0 +1,20 @@
+[gd_scene format=3 uid="uid://dxuvxnloos5u3"]
+
+[ext_resource type="Script" uid="uid://csncl6xnei4ev" path="res://demo/constraints/view.gd" id="1_qm2ov"]
+
+[node name="View" type="Node2D" unique_id=690905681]
+script = ExtResource("1_qm2ov")
+
+[node name="Clutch" type="HSlider" parent="." unique_id=1585506500]
+offset_right = 279.0
+offset_bottom = 34.0
+max_value = 1.0
+step = 0.01
+
+[node name="Brake" type="HSlider" parent="." unique_id=704081040]
+offset_left = 310.0
+offset_top = 1.0
+offset_right = 589.0
+offset_bottom = 35.0
+max_value = 1.0
+step = 0.01
