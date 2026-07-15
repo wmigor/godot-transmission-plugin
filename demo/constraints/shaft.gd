@@ -6,9 +6,10 @@ var angular_velocity: float
 var torque: float
 var inertia := 1.0
 var inv_inertia := 1.0
+var brake_torque: float
 
 
-func _init(inertia_: float):
+func _init(inertia_ := 1.0):
 	inertia = inertia_
 	inv_inertia = (1.0 / inertia) if inertia > 0.0 else 0.0
 
