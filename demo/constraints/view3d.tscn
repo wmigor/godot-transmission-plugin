@@ -1,0 +1,37 @@
+[gd_scene format=3 uid="uid://djfx64xx5d5ul"]
+
+[ext_resource type="Script" uid="uid://do3t7bdcr52i5" path="res://demo/constraints/card.gd" id="1_1whpl"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_eehox"]
+size = Vector3(1.8, 1, 4.65)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_v7ugd"]
+size = Vector3(10, 1, 10)
+
+[node name="View3d" type="Node3D" unique_id=834474578]
+
+[node name="Card" type="RigidBody3D" parent="." unique_id=2047032928]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.796997, 0)
+script = ExtResource("1_1whpl")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Card" unique_id=511421137]
+shape = SubResource("BoxShape3D_eehox")
+
+[node name="CSGBox3D" type="CSGBox3D" parent="Card/CollisionShape3D" unique_id=1655038223]
+size = Vector3(1.8, 1, 4.65)
+
+[node name="Ground" type="StaticBody3D" parent="." unique_id=299129500]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground" unique_id=602430290]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
+shape = SubResource("BoxShape3D_v7ugd")
+
+[node name="CSGBox3D" type="CSGBox3D" parent="Ground/CollisionShape3D" unique_id=2116490882]
+size = Vector3(10, 1, 10)
+
+[node name="Camera3D" type="Camera3D" parent="." unique_id=1582831832]
+transform = Transform3D(0.91304064, -0.24017712, 0.32965395, 0, 0.80823576, 0.5888591, -0.4078686, -0.5376523, 0.73795205, 3.725769, 4.4885864, 5.7609863)
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1997657720]
+transform = Transform3D(0.43155104, -0.8924153, 0.1317524, 0.63907385, 0.40552875, 0.6535527, -0.63666975, -0.19784182, 0.74532557, 0, 3.177063, 0.06958008)
+shadow_enabled = true
