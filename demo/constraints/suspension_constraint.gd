@@ -29,6 +29,9 @@ func _init(car: CustomCar, susp: CustomCar.Susp, ground: Plane) -> void:
 
 func pre_step(delta: float) -> void:
 	_update_parameters()
+	if not _contacted:
+		return
+
 	var radius := _contact_point - _center
 	_j_v = _contact_normal
 	_j_w = radius.cross(_contact_normal)
@@ -71,12 +74,13 @@ func _update_parameters() -> void:
 	_direction = _car.global_basis * _susp.direction
 	var point = _ground.intersects_ray(_origin, _direction)
 	if point != null:
+		_contact_point = point
 		var distance := _origin.distance_to(_contact_point)
 		_length = minf(_susp.rest_length, distance)
-		_contact_point = point
 		_contact_normal = _ground.normal
 		_contacted = distance <= _susp.rest_length
 	else:
 		_contacted = false
 		_length = _susp.rest_length
+	if not _contacted:
 		_accumulated_impulse = 0.0
