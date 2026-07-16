@@ -70,8 +70,8 @@ func step(_delta: float) -> void:
 
 func _update_parameters() -> void:
 	_center = _car.transform * _car.body_state.center_of_mass_local
-	_origin = _car.global_transform * _susp.pos
-	_direction = _car.global_basis * _susp.direction
+	_origin = _car.transform * _susp.pos
+	_direction = _car.basis * _susp.direction
 	var point = _ground.intersects_ray(_origin, _direction)
 	if point != null:
 		_contact_point = point
