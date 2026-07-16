@@ -11,8 +11,9 @@ size = Vector3(10, 1, 10)
 [node name="View3d" type="Node3D" unique_id=834474578]
 
 [node name="Car" type="RigidBody3D" parent="." unique_id=2047032928]
-transform = Transform3D(0.9364299, -0.33637533, 0.099752545, 0.35085452, 0.897785, -0.26623932, 0, 0.2843131, 0.9587316, 0, 4, 0)
+transform = Transform3D(1, 0, 0, 0, 1.0000002, 0, 0, 0, 1.0000002, 0, 2, 0)
 mass = 1300.0
+linear_velocity = Vector3(0, 0, -22)
 linear_damp_mode = 1
 angular_damp_mode = 1
 script = ExtResource("1_1whpl")

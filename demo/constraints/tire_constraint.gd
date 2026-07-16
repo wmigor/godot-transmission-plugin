@@ -1,9 +1,13 @@
 extends Constraint
 class_name TireConstraint
 
+var angle: float
+
 var _car: CustomCar
 var _susp: CustomCar.Susp
 var _ground: Plane
+var _wheel: Shaft
+var _wheel_radius: float
 
 var _effective_mass: float
 var _accumulated_impulse: float
@@ -22,10 +26,12 @@ var _j_w_wheel: float
 var _cfm: float
 
 
-func _init(car: CustomCar, susp: CustomCar.Susp, ground: Plane) -> void:
+func _init(car: CustomCar, susp: CustomCar.Susp, ground: Plane, wheel: Shaft, wheel_radius: float) -> void:
 	_car = car
 	_susp = susp
 	_ground = ground
+	_wheel = wheel
+	_wheel_radius = wheel_radius
 
 
 func pre_step(delta: float) -> void:
@@ -35,15 +41,11 @@ func pre_step(delta: float) -> void:
 
 	var radius := _contact_point - _center
 
-	var car_fwd := -_car.global_transform.basis.z.normalized()
+	var car_fwd := (-_car.global_transform.basis.z.normalized()).rotated(_direction, angle)
 	var fwd_on_ground := (car_fwd - _contact_normal * car_fwd.dot(_contact_normal)).normalized()
 	var v_car_point := _car.body_state.linear_velocity + _car.body_state.angular_velocity.cross(radius)
 	
-	var wheel_omega := 0.0
-	var wheel_radius := 0.3
-	var wheel_inv_inertia := 1.0 / 0.3
-	
-	var v_wheel_linear := fwd_on_ground * (wheel_omega * wheel_radius)
+	var v_wheel_linear := fwd_on_ground * (_wheel.angular_velocity * _wheel_radius)
 	var v_total_slip := v_car_point - v_wheel_linear
 	var v_slip_tangent := v_total_slip - _contact_normal * v_total_slip.dot(_contact_normal)
 
@@ -53,20 +55,20 @@ func pre_step(delta: float) -> void:
 
 	_j_v = slip_direction
 	_j_w_car = radius.cross(slip_direction)
-	_j_w_wheel = -wheel_radius * slip_direction.dot(fwd_on_ground)
+	_j_w_wheel = -_wheel_radius * slip_direction.dot(fwd_on_ground)
 
 	_cfm = 1.0 / (delta * _susp.tire_stiffness)
 	var inv_I_car := _car.body_state.inverse_inertia_tensor
 	
 	var K := _j_v.dot(_j_v) * _car.body_state.inverse_mass \
 		   + _j_w_car.dot(inv_I_car * _j_w_car) \
-		   + (_j_w_wheel * _j_w_wheel) * wheel_inv_inertia
-		
+		   + (_j_w_wheel * _j_w_wheel) * _wheel.inv_inertia
+
 	_effective_mass = 1.0 / (K + _cfm)
 
 	_car.body_state.apply_central_impulse(_j_v * _accumulated_impulse)
 	_car.body_state.apply_torque_impulse(_j_w_car * _accumulated_impulse)
-	#_wheel_1d.apply_torque_impulse(_j_w_wheel * _accumulated_impulse)
+	_wheel.apply_torque_impulse(_j_w_wheel * _accumulated_impulse)
 
 
 func step(_delta: float) -> void:
@@ -75,12 +77,10 @@ func step(_delta: float) -> void:
 
 	var max_friction_impulse := _susp.friction_coefficient * _susp.accumulated_impulse
 
-	var wheel_omega := 0.0
-	
 	var jv := _j_v.dot(_car.body_state.linear_velocity) \
 			 + _j_w_car.dot(_car.body_state.angular_velocity) \
-			 + _j_w_wheel * wheel_omega
-			
+			 + _j_w_wheel * _wheel.angular_velocity
+
 	var lambda := (0.0 - jv - _cfm * _accumulated_impulse) * _effective_mass
 	
 	var old_accumulated := _accumulated_impulse
@@ -89,7 +89,7 @@ func step(_delta: float) -> void:
 
 	_car.body_state.apply_central_impulse(_j_v * lambda)
 	_car.body_state.apply_torque_impulse(_j_w_car * lambda)
-	#_wheel_1d.apply_torque_impulse(_j_w_wheel * lambda)
+	_wheel.apply_torque_impulse(_j_w_wheel * lambda)
 
 
 func _update_parameters() -> void:

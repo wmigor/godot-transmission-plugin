@@ -44,8 +44,14 @@ func _ready() -> void:
 
 	for s in _susps:
 		_solver.constraints.append(SuspensionConstraint.new(self, s, _ground))
+	var tires: Array[TireConstraint]
 	for s in _susps:
-		_solver.constraints.append(TireConstraint.new(self, s, _ground))
+		var wheel := Shaft.new(0.3)
+		var tire = TireConstraint.new(self, s, _ground, wheel, 0.3)
+		tires.append(tire)
+		_solver.constraints.append(tire)
+	tires[2].angle = deg_to_rad(45)
+	tires[3].angle = deg_to_rad(45)
 
 
 func _integrate_forces(state: PhysicsDirectBodyState3D) -> void:
