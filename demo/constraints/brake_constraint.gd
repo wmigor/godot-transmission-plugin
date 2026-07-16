@@ -20,7 +20,7 @@ func _init(shaft_: Shaft, radius_: float, friction_factor_: float, max_normal_fo
 	max_normal_force = max_normal_force_
 
 
-func pre_step() -> void:
+func pre_step(_delta: float) -> void:
 	effective_mass = 1.0 / shaft.inv_inertia
 	shaft.apply_torque_impulse(accumulated_impulse)
 

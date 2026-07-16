@@ -22,7 +22,7 @@ func shift_gear(new_ratio: float):
 	accumulated_impulse = 0.0
 
 
-func pre_step() -> void:
+func pre_step(_delta: float) -> void:
 	if gear_ratio == 0.0:
 		effective_mass = 0.0
 		accumulated_impulse = 0.0

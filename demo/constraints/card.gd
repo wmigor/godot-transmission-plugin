@@ -1,11 +1,13 @@
 extends RigidBody3D
+class_name CustomCar
 
 class Susp:
 	var pos: Vector3
-	var length := 1.0
+	var rest_length := 1.0
 	var direction := Vector3.DOWN
-	var stiffness := 1000.0
-	var damping := 1.0
+	var stiffness := 20000.0
+	var damping_bump := 500.0
+	var damping_rebound := 1000.0
 
 var _solver := Solver.new()
 var _susps: Array[Susp]
@@ -15,7 +17,29 @@ var body_state: PhysicsDirectBodyState3D
 
 func _ready() -> void:
 	gravity_scale = 0.0
-	_susps.append(Susp.new())
+	
+	var susp := Susp.new()
+	susp.pos.x = 0.78
+	susp.pos.z = 1.35
+	_susps.append(susp)
+	
+	susp = Susp.new()
+	susp.pos.x = -0.78
+	susp.pos.z = 1.35
+	_susps.append(susp)
+	
+	susp = Susp.new()
+	susp.pos.x = -0.78
+	susp.pos.z = -1.35
+	_susps.append(susp)
+	
+	susp = Susp.new()
+	susp.pos.x = 0.78
+	susp.pos.z = -1.35
+	_susps.append(susp)
+
+	for s in _susps:
+		_solver.constraints.append(SuspensionConstraint.new(self, s, _ground))
 
 
 func _integrate_forces(state: PhysicsDirectBodyState3D) -> void:
@@ -23,18 +47,7 @@ func _integrate_forces(state: PhysicsDirectBodyState3D) -> void:
 	linear_velocity.y -= 9.8 * state.step
 	_solve(state.step)
 	state.integrate_forces()
-	print(get_susp_length(_susps[0]))
 
 
 func  _solve(delta: float) -> void:
 	_solver.step(delta)
-
-
-func get_susp_length(susp: Susp) -> float:
-	var pos := global_transform * susp.pos
-	var dir := global_basis * susp.direction
-	var point = _ground.intersects_ray(pos, dir)
-	if point == null:
-		return susp.length
-	var distance := pos.distance_to(point)
-	return minf(susp.length, distance)

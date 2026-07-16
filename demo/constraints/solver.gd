@@ -9,7 +9,7 @@ func step(delta: float) -> void:
 	for shaft in shafts:
 		shaft.integrate_angular_velocity(delta)
 	for constraint in constraints:
-		constraint.pre_step()
+		constraint.pre_step(delta)
 	for i in 20:
 		for constraint in constraints:
 			constraint.step(delta)

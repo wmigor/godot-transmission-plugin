@@ -20,7 +20,7 @@ func _init(shaft_in_: Shaft, shaft1_: Shaft, shaft2_: Shaft):
 	shaft2 = shaft2_
 
 
-func pre_step() -> void:
+func pre_step(_delta: float) -> void:
 	var k := j_in * j_in * shaft_in.inv_inertia + j_out * j_out * (shaft1.inv_inertia + shaft2.inv_inertia)
 	effective_mass = 1.0 / k
 

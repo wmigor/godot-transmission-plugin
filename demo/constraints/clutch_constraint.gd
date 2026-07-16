@@ -19,7 +19,7 @@ func _init(shaft1_: Shaft, shaft2_: Shaft, max_torque_: float):
 	max_torque = max_torque_
 
 
-func pre_step() -> void:
+func pre_step(_delta: float) -> void:
 	var k := shaft1.inv_inertia + shaft2.inv_inertia
 	effective_mass = 1.0 / k
 

@@ -10,14 +10,17 @@ size = Vector3(10, 1, 10)
 
 [node name="View3d" type="Node3D" unique_id=834474578]
 
-[node name="Card" type="RigidBody3D" parent="." unique_id=2047032928]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.796997, 0)
+[node name="Car" type="RigidBody3D" parent="." unique_id=2047032928]
+transform = Transform3D(0.99999994, 0, 0, 0, 1.0000001, 0, 0, 0, 1.0000001, 0, 4, 0)
+mass = 1300.0
+linear_damp_mode = 1
+angular_damp_mode = 1
 script = ExtResource("1_1whpl")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Card" unique_id=511421137]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Car" unique_id=511421137]
 shape = SubResource("BoxShape3D_eehox")
 
-[node name="CSGBox3D" type="CSGBox3D" parent="Card/CollisionShape3D" unique_id=1655038223]
+[node name="CSGBox3D" type="CSGBox3D" parent="Car/CollisionShape3D" unique_id=1655038223]
 size = Vector3(1.8, 1, 4.65)
 
 [node name="Ground" type="StaticBody3D" parent="." unique_id=299129500]

@@ -25,7 +25,7 @@ func shift_gear(new_ratio: float):
 	accumulated_impulse = 0.0
 
 
-func pre_step() -> void:
+func pre_step(_delta: float) -> void:
 	var k := shaft1.inv_inertia + gear_ratio * gear_ratio * shaft2.inv_inertia
 	effective_mass = 1.0 / k
 
