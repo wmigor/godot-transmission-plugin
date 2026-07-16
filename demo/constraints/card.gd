@@ -15,8 +15,19 @@ class Susp:
 
 var _solver := Solver.new()
 var _susps: Array[Susp]
+var _tires: Array[TireConstraint]
 var _ground := Plane(Vector3.UP, 0.0)
+
+var _motor := Shaft.new(0.1)
+var _cardan := Shaft.new(0.1)
+var _wheels: Array[Shaft] = [Shaft.new(0.3), Shaft.new(0.3), Shaft.new(0.3), Shaft.new(0.3)]
+var _gearbox := GearBoxConstraint.new(_motor, _cardan, 125.0, 14)
+var _differential := DifferencialConstraint.new(_cardan, _wheels[0], _wheels[1])
+var _brake1 := BrakeConstraint.new(_wheels[0], 0.1, 0.8, 3000.0)
+var _brake2 := BrakeConstraint.new(_wheels[1], 0.1, 0.8, 3000.0)
+
 var body_state: PhysicsDirectBodyState3D
+
 
 
 func _ready() -> void:
@@ -44,18 +55,22 @@ func _ready() -> void:
 
 	for s in _susps:
 		_solver.constraints.append(SuspensionConstraint.new(self, s, _ground))
-	var tires: Array[TireConstraint]
-	for s in _susps:
-		var wheel := Shaft.new(0.3)
-		var tire = TireConstraint.new(self, s, _ground, wheel, 0.3)
-		tires.append(tire)
+	
+	for i in len(_susps):
+		var tire = TireConstraint.new(self, _susps[i], _ground, _wheels[i], 0.3)
+		_tires.append(tire)
 		_solver.constraints.append(tire)
-	tires[2].angle = deg_to_rad(45)
-	tires[3].angle = deg_to_rad(45)
+	_tires[2].angle = deg_to_rad(45)
+	_tires[3].angle = deg_to_rad(45)
+
+	_solver.shafts.append_array([_motor, _cardan])
+	_solver.shafts.append_array(_wheels)
+	_solver.constraints.append_array([_gearbox, _differential, _brake1, _brake2])
 
 
 func _integrate_forces(state: PhysicsDirectBodyState3D) -> void:
 	body_state = state
+	_motor.torque = 100.0 - _motor.angular_velocity * 0.1
 	linear_velocity.y -= 9.8 * state.step
 	_solve(state.step)
 	state.integrate_forces()
