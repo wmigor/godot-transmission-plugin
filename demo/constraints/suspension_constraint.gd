@@ -62,6 +62,7 @@ func step(_delta: float) -> void:
 
 	var old_accumulated := _accumulated_impulse
 	_accumulated_impulse = maxf(_accumulated_impulse + lambda, 0.0)
+	_susp.accumulated_impulse = _accumulated_impulse
 	lambda = _accumulated_impulse - old_accumulated
 
 	_car.body_state.apply_central_impulse(_j_v * lambda)
@@ -84,3 +85,4 @@ func _update_parameters() -> void:
 		_length = _susp.rest_length
 	if not _contacted:
 		_accumulated_impulse = 0.0
+		_susp.accumulated_impulse = 0.0

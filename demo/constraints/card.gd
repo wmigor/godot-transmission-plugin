@@ -9,6 +9,10 @@ class Susp:
 	var damping_bump := 500.0
 	var damping_rebound := 1000.0
 
+	var accumulated_impulse: float
+	var friction_coefficient := 0.8
+	var tire_stiffness := 5000.0
+
 var _solver := Solver.new()
 var _susps: Array[Susp]
 var _ground := Plane(Vector3.UP, 0.0)
@@ -40,6 +44,8 @@ func _ready() -> void:
 
 	for s in _susps:
 		_solver.constraints.append(SuspensionConstraint.new(self, s, _ground))
+	for s in _susps:
+		_solver.constraints.append(TireConstraint.new(self, s, _ground))
 
 
 func _integrate_forces(state: PhysicsDirectBodyState3D) -> void:
