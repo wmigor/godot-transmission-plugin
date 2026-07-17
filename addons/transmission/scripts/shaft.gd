@@ -15,6 +15,10 @@ var inertia := 1.0:
 var inv_inertia := 1.0:
 	get(): return inv_inertia
 
+var rpm: float:
+	get: return angular_velocity * TorqueCurve.TO_RPM
+	set(value): angular_velocity = value / TorqueCurve.TO_RPM
+
 
 func _init(inertia_ := 1.0):
 	inertia = inertia_

@@ -2,6 +2,7 @@ extends Constraint
 class_name TireConstraint
 
 var angle: float
+var sliding: bool
 
 var _car: CustomCar
 var _susp: CustomCar.Susp
@@ -41,7 +42,7 @@ func pre_step(delta: float) -> void:
 
 	var radius := _contact_point - _center
 
-	var car_fwd := (-_car.global_transform.basis.z.normalized()).rotated(_direction, angle)
+	var car_fwd := (-_car.global_transform.basis.z.normalized()).rotated(-_direction, angle)
 	var fwd_on_ground := (car_fwd - _contact_normal * car_fwd.dot(_contact_normal)).normalized()
 	var v_car_point := _car.body_state.linear_velocity + _car.body_state.angular_velocity.cross(radius)
 	
@@ -84,7 +85,9 @@ func step(_delta: float) -> void:
 	var lambda := (0.0 - jv - _cfm * _accumulated_impulse) * _effective_mass
 	
 	var old_accumulated := _accumulated_impulse
-	_accumulated_impulse = clampf(_accumulated_impulse + lambda, -max_friction_impulse, max_friction_impulse)
+	var new_accumulated := _accumulated_impulse + lambda
+	sliding = new_accumulated > max_friction_impulse or new_accumulated < -max_friction_impulse
+	_accumulated_impulse = clampf(new_accumulated, -max_friction_impulse, max_friction_impulse)
 	lambda = _accumulated_impulse - old_accumulated
 
 	_car.body_state.apply_central_impulse(_j_v * lambda)
