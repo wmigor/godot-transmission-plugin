@@ -9,9 +9,9 @@ class Susp:
 	var pos: Vector3
 	var rest_length := 1.0
 	var direction := Vector3.DOWN
-	var stiffness := 20000.0
-	var damping_bump := 500.0
-	var damping_rebound := 1000.0
+	var stiffness := 40000.0
+	var damping_bump := 4000.0
+	var damping_rebound := 4000.0
 
 	var accumulated_impulse: float
 	var friction_coefficient := 0.8

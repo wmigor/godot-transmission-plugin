@@ -40,7 +40,7 @@ func pre_step(delta: float) -> void:
 
 	var jv := _j_v.dot(_car.body_state.linear_velocity) + _j_w.dot(_car.body_state.angular_velocity)	
 	var damping := _susp.damping_bump if jv < 0.0 else _susp.damping_rebound
-	_cfm = 1.0 / (delta * _susp.stiffness + damping)
+	_cfm = 1.0 / (delta * (delta * _susp.stiffness + damping))
 	var erp := (delta * _susp.stiffness) / (delta * _susp.stiffness + damping)
 	
 	var inv_inertial_world := _car.body_state.inverse_inertia_tensor
@@ -48,6 +48,7 @@ func pre_step(delta: float) -> void:
 	_effective_mass = 1.0 / (K + _cfm)
 	_bias = -(erp / delta) * error
 	
+	_accumulated_impulse *= 1.0 / (1.0 + _cfm * delta)
 	_car.body_state.apply_central_impulse(_j_v * _accumulated_impulse)
 	_car.body_state.apply_torque_impulse(_j_w * _accumulated_impulse)
 
